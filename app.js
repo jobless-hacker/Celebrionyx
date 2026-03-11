@@ -546,7 +546,6 @@
     const mobileMenuBtn = $("mobileMenuBtn");
     const orgSwitcher = $("orgSwitcher");
     const orgLabel = $("orgLabel");
-    const sectionRibbonTitle = document.querySelector(".section-ribbon h3");
     const userMenuBtn = $("userMenuBtn");
     const userMenuPanel = $("userMenuPanel");
     const topbarUserName = $("topbarUserName");
@@ -559,23 +558,40 @@
     const alertBadge = $("alertBadge");
     const refreshAlertsBtn = $("refreshAlertsBtn");
     const refreshRecentBtn = $("refreshRecentBtn");
+    const heroRefreshBtn = $("heroRefreshBtn");
+
+    const dashboardOrgName = $("dashboardOrgName");
+    const heroOrgDomain = $("heroOrgDomain");
+    const monitoringStatusBadge = $("monitoringStatusBadge");
+    const heroLastSync = $("heroLastSync");
+
+    const kpiRiskScore = $("kpiRiskScore");
+    const kpiRiskMeta = $("kpiRiskMeta");
+    const kpiActiveAlerts = $("kpiActiveAlerts");
+    const kpiCriticalAlerts = $("kpiCriticalAlerts");
+    const kpiNewFindings = $("kpiNewFindings");
+    const kpiMonitoredSources = $("kpiMonitoredSources");
+    const kpiLeakMentions = $("kpiLeakMentions");
+    const kpiSuspiciousDomains = $("kpiSuspiciousDomains");
+    const kpiExposedAssets = $("kpiExposedAssets");
 
     const riskMeter = $("riskMeter");
     const riskScoreValue = $("riskScoreValue");
     const riskScoreLabel = $("riskScoreLabel");
     const riskEntityLabel = $("riskEntityLabel");
+    const riskContextCopy = $("riskContextCopy");
     const affectedAssets = $("affectedAssets");
     const activeAlertsCount = $("activeAlertsCount");
     const activeMentionsCount = $("activeMentionsCount");
     const mentionsDelta = $("mentionsDelta");
-    const surfaceCount = $("surfaceCount");
-    const darkCount = $("darkCount");
+
     const sourceDonut = $("sourceDonut");
-    const darkPercentLabel = $("darkPercentLabel");
-    const surfacePercentLabel = $("surfacePercentLabel");
-    const darkWebPercentLabel = $("darkWebPercentLabel");
-    const growthDelta = $("growthDelta");
-    const suspiciousDomainsCount = $("suspiciousDomainsCount");
+    const sourceSurfaceValue = $("sourceSurfaceValue");
+    const sourceLeakValue = $("sourceLeakValue");
+    const sourceDomainValue = $("sourceDomainValue");
+    const sourceDocumentValue = $("sourceDocumentValue");
+    const sourceBrandValue = $("sourceBrandValue");
+    const sourceTotalPercent = $("sourceTotalPercent");
 
     const trendGrid = $("trendGrid");
     const trendYLabels = $("trendYLabels");
@@ -589,6 +605,10 @@
     const newAlertsList = $("newAlertsList");
     const findingsList = $("findingsList");
     const recentAlertsList = $("recentAlertsList");
+    const statusNewCount = $("statusNewCount");
+    const statusInvestigatingCount = $("statusInvestigatingCount");
+    const statusConfirmedCount = $("statusConfirmedCount");
+    const statusResolvedCount = $("statusResolvedCount");
 
     if (!dashboardShell || !logoutBtn || !newAlertsList || !findingsList || !recentAlertsList) {
       return;
@@ -596,51 +616,72 @@
 
     const orgProfiles = [
       {
+        orgName: "Acme Corporation",
         org: "acme-corp.com",
-        entity: "amity + silvers",
+        monitoringStatus: "Monitoring Active",
+        lastSyncMinutes: 5,
+        entity: "acme-corp + executive identity",
         riskScore: 82,
         affectedAssets: 17,
-        activeAlerts: 32,
-        mentions: 128,
+        leakMentions: 128,
         mentionsDelta: "+15.1%",
-        sourceSurfaceCount: 156,
-        sourceDarkCount: 32,
-        sourceSurfacePercent: 35,
-        sourceDarkPercent: 65,
-        sourceGrowth: "+35%",
+        monitoredSources: 156,
         suspiciousDomains: 26,
+        exposedAssets: 17,
+        riskContext: "Credential leaks and typosquatting activity increased in the last 24 hours.",
+        sourceMix: {
+          surface: 35,
+          leak: 27,
+          domain: 18,
+          document: 11,
+          brand: 9
+        },
         trendBias: 0
       },
       {
+        orgName: "Northstar Finance",
         org: "northstar-finance.io",
-        entity: "northstar + vault",
+        monitoringStatus: "Monitoring Active",
+        lastSyncMinutes: 7,
+        entity: "northstar + customer trust assets",
         riskScore: 74,
         affectedAssets: 13,
-        activeAlerts: 24,
-        mentions: 109,
+        leakMentions: 109,
         mentionsDelta: "+9.4%",
-        sourceSurfaceCount: 141,
-        sourceDarkCount: 24,
-        sourceSurfacePercent: 41,
-        sourceDarkPercent: 59,
-        sourceGrowth: "+22%",
+        monitoredSources: 141,
         suspiciousDomains: 19,
+        exposedAssets: 12,
+        riskContext: "Credential abuse stabilized, but phishing and impersonation are still active.",
+        sourceMix: {
+          surface: 39,
+          leak: 24,
+          domain: 20,
+          document: 9,
+          brand: 8
+        },
         trendBias: -8
       },
       {
+        orgName: "Orbital Grid",
         org: "orbital-grid.net",
-        entity: "orbital + transit",
+        monitoringStatus: "Monitoring Active",
+        lastSyncMinutes: 9,
+        entity: "orbital-grid + supply chain footprint",
         riskScore: 68,
         affectedAssets: 9,
-        activeAlerts: 18,
-        mentions: 93,
+        leakMentions: 93,
         mentionsDelta: "+6.8%",
-        sourceSurfaceCount: 125,
-        sourceDarkCount: 19,
-        sourceSurfacePercent: 44,
-        sourceDarkPercent: 56,
-        sourceGrowth: "+14%",
+        monitoredSources: 125,
         suspiciousDomains: 11,
+        exposedAssets: 8,
+        riskContext: "Leak exposure cooled down, while vulnerability chatter remains elevated.",
+        sourceMix: {
+          surface: 43,
+          leak: 21,
+          domain: 19,
+          document: 9,
+          brand: 8
+        },
         trendBias: -14
       }
     ];
@@ -667,92 +708,123 @@
       {
         id: 1,
         severity: "critical",
-        title: "Credential Leak",
-        detail: "GRl8ins, acme-c0rp.exine.com",
+        title: "Credential Leak Found on Dark Web",
+        detail: "Acme executive login pair appeared on Breach Forums",
+        source: "Breach Forums",
+        confidence: 95,
+        status: "Investigating",
         time: "5m ago"
+      },
+      {
+        id: 2,
+        severity: "critical",
+        title: "Typosquatting Domain Detected",
+        detail: "acn3-corp.com mimics primary domain and login portal",
+        source: "Threat Exchange",
+        confidence: 90,
+        status: "Investigating",
+        time: "12m ago"
       },
       {
         id: 4,
         severity: "high",
-        title: "Data Leak",
-        detail: "acrter onmiscrnes, camoche@eain.com...",
-        time: "13m ago"
+        title: "Data Leak Mentioned on Dark Web",
+        detail: "Internal procurement archive offered in private channel",
+        source: "Hidden Marketplace",
+        confidence: 85,
+        status: "New",
+        time: "25m ago"
       },
       {
         id: 7,
-        severity: "high",
-        title: "Exposed Database",
-        detail: "Phahs for intressissearch server",
-        time: "35m ago"
-      },
-      {
-        id: 10,
         severity: "medium",
-        title: "Data Leak",
-        detail: "Internal documents for sale",
-        time: "1h ago"
+        title: "Acme RDP Server Found Vulnerable",
+        detail: "Legacy service exposed with weak handshake policy",
+        source: "Shodan",
+        confidence: 70,
+        status: "New",
+        time: "47m ago"
       }
     ];
 
     const baseFindings = [
       {
-        badge: "1",
+        id: 2,
         severity: "critical",
-        title: "Impersonation",
-        detail: "Typosquatted Domains",
-        time: "15m"
+        title: "Impersonation Infrastructure Expanded",
+        detail: "Three additional lookalike domains observed in campaign set",
+        source: "Domain Monitoring",
+        confidence: 93,
+        time: "11m ago"
       },
       {
-        badge: "Hig",
+        id: 4,
         severity: "high",
-        title: "Credential Leak",
-        detail: "Dark Web, Email emait password paits",
-        time: "2m"
+        title: "Credential Dump Mention Increased",
+        detail: "Leak channel references Acme email pattern and VPN accounts",
+        source: "Leak Source",
+        confidence: 89,
+        time: "19m ago"
       },
       {
-        badge: "Hig",
-        severity: "high",
-        title: "Exposed Database",
-        detail: "Open Database;, raooen. Elasrisecards.",
-        time: "1m"
-      },
-      {
-        badge: "Hig",
-        severity: "critical",
-        title: "Ransomware Leak",
-        detail: "ACME Corp, h.maneomere nete",
-        time: "11m"
-      },
-      {
-        badge: "Mod",
+        id: 6,
         severity: "medium",
-        title: "Vulnerability",
-        detail: "Unpatined critical CVE",
-        time: "15m"
+        title: "Phishing Lure Template Reused",
+        detail: "Regional payroll lure now mirrors current HR notice format",
+        source: "Surface Web",
+        confidence: 82,
+        time: "34m ago"
+      },
+      {
+        id: 8,
+        severity: "medium",
+        title: "Database Exposure Mentioned",
+        detail: "Forum post points to stale backup snapshot in cloud bucket",
+        source: "Document Mention",
+        confidence: 77,
+        time: "53m ago"
+      },
+      {
+        id: 11,
+        severity: "low",
+        title: "Brand Abuse Signal Detected",
+        detail: "Spoofed social profile linked to known fraud ecosystem",
+        source: "Brand Abuse",
+        confidence: 66,
+        time: "1h ago"
       }
     ];
 
     const baseRecentAlerts = [
       {
-        id: 2,
-        severity: "critical",
-        title: "Typosquatted",
-        detail: "Impersonatnng. Acme-c0rp.com",
-        time: "2 minutes ago"
-      },
-      {
         id: 3,
         severity: "critical",
-        title: "Dark Web",
-        detail: "Leaked email. password",
-        time: "4 minutes ago"
+        title: "Acme Corp Credentials Exposed",
+        detail: "Credential leak tied to older SSO provider segment",
+        source: "Pastebin",
+        confidence: 87,
+        status: "Investigating",
+        time: "2m ago"
       },
       {
         id: 5,
+        severity: "high",
+        title: "Executive Email Found in Data Dump",
+        detail: "Executive alias observed alongside password hint metadata",
+        source: "PasteSite",
+        confidence: 80,
+        status: "Investigating",
+        time: "7m ago"
+      },
+      {
+        id: 9,
         severity: "low",
-        title: "Data Leak",
-        detail: "Internal documents for sale.",
-        time: "9 minutes ago"
+        title: "Employee List Shared on Pastebin",
+        detail: "Directory snapshot includes stale contact and department tags",
+        source: "Pastebin",
+        confidence: 60,
+        status: "New",
+        time: "14m ago"
       }
     ];
 
@@ -760,6 +832,8 @@
     let currentPeriod = "30d";
     let alertsRotation = 0;
     let recentRotation = 0;
+
+    const trackedAlertIds = Array.from({ length: 33 }, (_, index) => index + 1);
 
     const severityClass = (value) => {
       if (value === "critical") {
@@ -774,6 +848,16 @@
       return "low";
     };
 
+    const statusClass = (value) => {
+      if (value === "Investigating") {
+        return "investigating";
+      }
+      if (value === "Resolved") {
+        return "resolved";
+      }
+      return "new";
+    };
+
     const riskLabelFromScore = (score) => {
       if (score >= 80) {
         return "High Risk";
@@ -785,51 +869,114 @@
     };
 
     const rotateBy = (list, offset) => {
+      if (!Array.isArray(list) || list.length === 0) {
+        return [];
+      }
       const safeOffset = ((offset % list.length) + list.length) % list.length;
       return [...list.slice(safeOffset), ...list.slice(0, safeOffset)];
     };
 
-    const trackedAlertIds = Array.from({ length: 33 }, (_, index) => index + 1);
-
     const getSharedAlertStats = () => {
       const records = getInvestigationRecords(trackedAlertIds);
-      const unresolved = records.filter((record) => record.status !== "Resolved").length;
-      const investigating = records.filter((record) => record.status === "Investigating").length;
+      const stats = {
+        new: 0,
+        investigating: 0,
+        confirmed: 0,
+        resolved: 0,
+        unresolved: 0,
+        critical: 0
+      };
+
+      records.forEach((record) => {
+        const status = normalizeInvestigationStatus(record.status);
+        if (status === "Resolved") {
+          stats.resolved += 1;
+          return;
+        }
+
+        stats.unresolved += 1;
+        if (record.severity === "critical") {
+          stats.critical += 1;
+        }
+        if (status === "New") {
+          stats.new += 1;
+          return;
+        }
+        if (Number(record.confidence) >= 88) {
+          stats.confirmed += 1;
+        } else {
+          stats.investigating += 1;
+        }
+      });
+
+      return stats;
+    };
+
+    const hydrateAlertItem = (item) => {
+      if (!item.id) {
+        return { ...item };
+      }
+      const record = getInvestigationRecord(item.id, {
+        title: item.title,
+        severity: item.severity,
+        source: item.source,
+        confidence: item.confidence,
+        status: item.status
+      });
       return {
-        unresolved,
-        investigating
+        ...item,
+        severity: record.severity ?? item.severity,
+        confidence: Number(record.confidence) || item.confidence,
+        status: record.status ?? item.status
       };
     };
 
+    const findingsConfidenceBand = (confidence) => {
+      if (confidence >= 90) {
+        return "Critical";
+      }
+      if (confidence >= 80) {
+        return "High";
+      }
+      if (confidence >= 70) {
+        return "Medium";
+      }
+      return "Low";
+    };
+
     const renderNewAlerts = (items) => {
+      if (!items.length) {
+        newAlertsList.innerHTML = `<li class="empty-state">No priority alerts matched your filters.</li>`;
+        return;
+      }
       newAlertsList.innerHTML = items
         .map(
           (item) => `
-            <li class="feed-item" data-search="${escapeHtml(
-              `${item.severity} ${item.title} ${item.detail} ${item.time}`
+            <li class="alert-row js-dashboard-searchable" data-search="${escapeHtml(
+              `${item.severity} ${item.title} ${item.detail} ${item.source} ${item.status} ${item.time}`
             )}">
-              <span class="chip ${severityClass(item.severity)}">
-                <i class="chip-icon" aria-hidden="true">&#9650;</i>
-                ${escapeHtml(item.severity[0].toUpperCase() + item.severity.slice(1))}
-              </span>
-              <div>
-                <p class="entry-title">
+              <div class="alert-main">
+                <p class="alert-title">
                   ${
                     item.id
                       ? `<a class="table-title-link dashboard-alert-link" href="alert-details.html?id=${item.id}">${escapeHtml(item.title)}</a>`
                       : escapeHtml(item.title)
                   }
                 </p>
-                <p class="entry-sub">${escapeHtml(item.detail)}</p>
+                <p class="alert-sub">${escapeHtml(item.detail)}</p>
               </div>
-              <div class="feed-item-actions">
-                <span class="entry-time">${escapeHtml(item.time)}</span>
-                ${
-                  item.id
-                    ? `<button type="button" class="small-link-btn js-dashboard-investigate" data-id="${item.id}">Investigate</button>`
-                    : ""
-                }
+              <div class="alert-meta">
+                <span class="severity-badge ${severityClass(item.severity)} alert-severity">${escapeHtml(
+                  item.severity[0].toUpperCase() + item.severity.slice(1)
+                )}</span>
+                <span class="status-badge ${statusClass(item.status)} alert-status">${escapeHtml(item.status)}</span>
+                <span class="alert-time">${escapeHtml(item.time)}</span>
               </div>
+              ${
+                item.id
+                  ? `<button type="button" class="small-link-btn js-dashboard-investigate" data-id="${item.id}">Investigate</button>`
+                  : ""
+              }
             </li>
           `
         )
@@ -837,18 +984,25 @@
     };
 
     const renderFindings = (items) => {
+      if (!items.length) {
+        findingsList.innerHTML = `<li class="empty-state">No findings available right now.</li>`;
+        return;
+      }
       findingsList.innerHTML = items
         .map(
           (item) => `
-            <li class="finding-item" data-search="${escapeHtml(
-              `${item.badge} ${item.severity} ${item.title} ${item.detail} ${item.time}`
+            <li class="finding-row js-dashboard-searchable" data-search="${escapeHtml(
+              `${item.severity} ${item.title} ${item.detail} ${item.source} ${item.time}`
             )}">
-              <span class="chip ${severityClass(item.severity)}">${escapeHtml(item.badge)}</span>
-              <div>
-                <p class="entry-title">${escapeHtml(item.title)}</p>
-                <p class="entry-sub">${escapeHtml(item.detail)}</p>
+              <div class="finding-main">
+                <p class="finding-title">${escapeHtml(item.title)}</p>
+                <p class="finding-meta">${escapeHtml(item.detail)}</p>
               </div>
-              <span class="entry-time">${escapeHtml(item.time)}</span>
+              <div class="finding-side">
+                <span class="source-tag">${escapeHtml(item.source)}</span>
+                <span class="finding-badge ${severityClass(item.severity)}">${findingsConfidenceBand(item.confidence)}</span>
+                <span class="finding-time">${escapeHtml(item.time)}</span>
+              </div>
             </li>
           `
         )
@@ -856,27 +1010,34 @@
     };
 
     const renderRecentAlerts = (items) => {
+      if (!items.length) {
+        recentAlertsList.innerHTML = `<li class="empty-state">No recent alert activity.</li>`;
+        return;
+      }
       recentAlertsList.innerHTML = items
         .map(
           (item) => `
-            <li class="recent-item" data-search="${escapeHtml(
-              `${item.severity} ${item.title} ${item.detail} ${item.time}`
+            <li class="recent-alert-row js-dashboard-searchable" data-search="${escapeHtml(
+              `${item.severity} ${item.title} ${item.detail} ${item.status} ${item.time}`
             )}">
-              <span class="chip ${severityClass(item.severity)}">
-                <i class="chip-icon" aria-hidden="true">&#9650;</i>
-                ${escapeHtml(item.severity[0].toUpperCase() + item.severity.slice(1))}
-              </span>
-              <div>
-                <p class="entry-title">
+              <div class="recent-alert-main">
+                <p class="alert-title">
                   ${
                     item.id
                       ? `<a class="table-title-link dashboard-alert-link" href="alert-details.html?id=${item.id}">${escapeHtml(item.title)}</a>`
                       : escapeHtml(item.title)
                   }
                 </p>
-                <p class="entry-sub">${escapeHtml(item.detail)}</p>
+                <p class="alert-sub">${escapeHtml(item.detail)}</p>
               </div>
-              <span class="entry-time">${escapeHtml(item.time)}</span>
+              <div class="recent-alert-meta">
+                <span class="severity-badge ${severityClass(item.severity)}">${escapeHtml(
+                  item.severity[0].toUpperCase() + item.severity.slice(1)
+                )}</span>
+                <span class="status-badge ${statusClass(item.status)}">${escapeHtml(item.status)}</span>
+                <span class="confidence-pill">${Math.round(item.confidence)}%</span>
+                <span class="alert-time">${escapeHtml(item.time)}</span>
+              </div>
             </li>
           `
         )
@@ -885,25 +1046,72 @@
 
     const applySearch = () => {
       const term = dashboardSearch?.value.trim().toLowerCase() ?? "";
-      const allItems = document.querySelectorAll(".feed-item, .finding-item, .recent-item");
+      const allItems = document.querySelectorAll(".page-dashboard .js-dashboard-searchable");
       allItems.forEach((item) => {
         const haystack = (item.getAttribute("data-search") ?? "").toLowerCase();
         item.classList.toggle("hidden", Boolean(term) && !haystack.includes(term));
       });
     };
 
-    const updateNotificationCounters = (profile) => {
-      const sharedStats = getSharedAlertStats();
-      const count = Math.max(1, Math.min(9, Math.round(sharedStats.investigating / 3)));
+    const updateNotificationCounters = (stats) => {
+      const count = Math.max(1, Math.min(9, Math.round((stats.investigating + stats.confirmed) / 3)));
       if (notifyCount) {
         notifyCount.textContent = String(count);
       }
       if (alertBadge) {
-        alertBadge.textContent = String(sharedStats.unresolved);
+        alertBadge.textContent = String(stats.unresolved);
       }
     };
 
-    const updateRiskPanel = (profile) => {
+    const updateHero = (profile) => {
+      if (orgLabel) {
+        orgLabel.textContent = profile.org;
+      }
+      if (dashboardOrgName) {
+        dashboardOrgName.textContent = profile.orgName;
+      }
+      if (heroOrgDomain) {
+        heroOrgDomain.textContent = profile.org;
+      }
+      if (monitoringStatusBadge) {
+        monitoringStatusBadge.textContent = profile.monitoringStatus;
+      }
+      if (heroLastSync) {
+        heroLastSync.textContent = `${profile.lastSyncMinutes} min ago`;
+      }
+    };
+
+    const updateKpis = (profile, stats) => {
+      if (kpiRiskScore) {
+        kpiRiskScore.textContent = String(profile.riskScore);
+      }
+      if (kpiRiskMeta) {
+        kpiRiskMeta.textContent = `${riskLabelFromScore(profile.riskScore)} - ${profile.riskContext}`;
+      }
+      if (kpiActiveAlerts) {
+        kpiActiveAlerts.textContent = String(stats.unresolved);
+      }
+      if (kpiCriticalAlerts) {
+        kpiCriticalAlerts.textContent = String(stats.critical);
+      }
+      if (kpiNewFindings) {
+        kpiNewFindings.textContent = String(Math.max(6, stats.new + stats.confirmed + 6));
+      }
+      if (kpiMonitoredSources) {
+        kpiMonitoredSources.textContent = String(profile.monitoredSources);
+      }
+      if (kpiLeakMentions) {
+        kpiLeakMentions.textContent = String(profile.leakMentions);
+      }
+      if (kpiSuspiciousDomains) {
+        kpiSuspiciousDomains.textContent = String(profile.suspiciousDomains);
+      }
+      if (kpiExposedAssets) {
+        kpiExposedAssets.textContent = String(profile.exposedAssets);
+      }
+    };
+
+    const updateRiskPanel = (profile, stats) => {
       riskMeter?.style.setProperty("--risk-score", String(profile.riskScore));
       if (riskScoreValue) {
         riskScoreValue.textContent = String(profile.riskScore);
@@ -914,47 +1122,77 @@
       if (riskEntityLabel) {
         riskEntityLabel.textContent = profile.entity;
       }
+      if (riskContextCopy) {
+        riskContextCopy.textContent = profile.riskContext;
+      }
       if (affectedAssets) {
         affectedAssets.textContent = String(profile.affectedAssets);
       }
       if (activeAlertsCount) {
-        const sharedStats = getSharedAlertStats();
-        activeAlertsCount.textContent = String(sharedStats.unresolved);
+        activeAlertsCount.textContent = String(stats.unresolved);
       }
       if (activeMentionsCount) {
-        activeMentionsCount.textContent = String(profile.mentions);
+        activeMentionsCount.textContent = String(profile.leakMentions);
       }
       if (mentionsDelta) {
         mentionsDelta.textContent = profile.mentionsDelta;
       }
-      if (surfaceCount) {
-        surfaceCount.textContent = String(profile.sourceSurfaceCount);
-      }
-      if (darkCount) {
-        darkCount.textContent = String(profile.sourceDarkCount);
-      }
+    };
+
+    const updateSourceBreakdown = (profile) => {
+      const surface = profile.sourceMix.surface;
+      const leak = profile.sourceMix.leak;
+      const domain = profile.sourceMix.domain;
+      const document = profile.sourceMix.document;
+      const brand = profile.sourceMix.brand;
+
+      const s1 = surface;
+      const s2 = surface + leak;
+      const s3 = s2 + domain;
+      const s4 = s3 + document;
+
       if (sourceDonut) {
         sourceDonut.style.background = `conic-gradient(
-          #5dc6ff 0 ${profile.sourceSurfacePercent}%,
-          #f6cf64 ${profile.sourceSurfacePercent}% 100%
+          #57c7ff 0 ${s1}%,
+          #f6c765 ${s1}% ${s2}%,
+          #6f9bff ${s2}% ${s3}%,
+          #82d7da ${s3}% ${s4}%,
+          #b694ff ${s4}% 100%
         )`;
       }
-      if (darkPercentLabel) {
-        darkPercentLabel.textContent = `${profile.sourceDarkPercent}%`;
+      if (sourceSurfaceValue) {
+        sourceSurfaceValue.textContent = `${surface}%`;
       }
-      if (surfacePercentLabel) {
-        surfacePercentLabel.textContent = `${profile.sourceSurfacePercent}%`;
+      if (sourceLeakValue) {
+        sourceLeakValue.textContent = `${leak}%`;
       }
-      if (darkWebPercentLabel) {
-        darkWebPercentLabel.textContent = `${profile.sourceDarkPercent}%`;
+      if (sourceDomainValue) {
+        sourceDomainValue.textContent = `${domain}%`;
       }
-      if (growthDelta) {
-        growthDelta.textContent = profile.sourceGrowth;
+      if (sourceDocumentValue) {
+        sourceDocumentValue.textContent = `${document}%`;
       }
-      if (suspiciousDomainsCount) {
-        suspiciousDomainsCount.textContent = `+${profile.suspiciousDomains}`;
+      if (sourceBrandValue) {
+        sourceBrandValue.textContent = `${brand}%`;
       }
-      updateNotificationCounters(profile);
+      if (sourceTotalPercent) {
+        sourceTotalPercent.textContent = "100%";
+      }
+    };
+
+    const updateStatusSummary = (stats) => {
+      if (statusNewCount) {
+        statusNewCount.textContent = String(stats.new);
+      }
+      if (statusInvestigatingCount) {
+        statusInvestigatingCount.textContent = String(stats.investigating);
+      }
+      if (statusConfirmedCount) {
+        statusConfirmedCount.textContent = String(stats.confirmed);
+      }
+      if (statusResolvedCount) {
+        statusResolvedCount.textContent = String(stats.resolved);
+      }
     };
 
     const renderTrendChart = (period) => {
@@ -997,7 +1235,10 @@
 
       const yTicks = [0, 40, 80, 120, 160, 200];
       trendGrid.innerHTML = yTicks
-        .map((tick) => `<line x1="${padding.left}" y1="${toY(tick)}" x2="${width - padding.right}" y2="${toY(tick)}"></line>`)
+        .map(
+          (tick) =>
+            `<line x1="${padding.left}" y1="${toY(tick)}" x2="${width - padding.right}" y2="${toY(tick)}"></line>`
+        )
         .join("");
 
       trendYLabels.innerHTML = yTicks
@@ -1038,12 +1279,28 @@
         .join("");
     };
 
+    const renderFeeds = () => {
+      const rotatedAlerts = rotateBy(baseNewAlerts, alertsRotation).map(hydrateAlertItem);
+      const rotatedFindings = rotateBy(baseFindings, alertsRotation % baseFindings.length).map(
+        hydrateAlertItem
+      );
+      const rotatedRecent = rotateBy(baseRecentAlerts, recentRotation).map(hydrateAlertItem);
+
+      renderNewAlerts(rotatedAlerts);
+      renderFindings(rotatedFindings);
+      renderRecentAlerts(rotatedRecent);
+      applySearch();
+    };
+
     const updateOrgView = () => {
       const profile = orgProfiles[orgIndex];
-      if (orgLabel) {
-        orgLabel.textContent = profile.org;
-      }
-      updateRiskPanel(profile);
+      const stats = getSharedAlertStats();
+      updateHero(profile);
+      updateKpis(profile, stats);
+      updateRiskPanel(profile, stats);
+      updateSourceBreakdown(profile);
+      updateStatusSummary(stats);
+      updateNotificationCounters(stats);
       renderTrendChart(currentPeriod);
     };
 
@@ -1066,15 +1323,14 @@
 
     const cycleAlerts = () => {
       alertsRotation += 1;
-      renderNewAlerts(rotateBy(baseNewAlerts, alertsRotation));
-      renderFindings(rotateBy(baseFindings, alertsRotation % baseFindings.length));
-      applySearch();
+      renderFeeds();
+      updateOrgView();
     };
 
     const cycleRecentAlerts = () => {
       recentRotation += 1;
-      renderRecentAlerts(rotateBy(baseRecentAlerts, recentRotation));
-      applySearch();
+      renderFeeds();
+      updateOrgView();
     };
 
     sidebarNav?.querySelectorAll(".side-nav-item").forEach((button) => {
@@ -1102,10 +1358,6 @@
         }
         sidebarNav.querySelectorAll(".side-nav-item").forEach((item) => item.classList.remove("active"));
         button.classList.add("active");
-        if (sectionRibbonTitle) {
-          const selected = button.querySelector(".nav-label")?.textContent ?? "Dashboard";
-          sectionRibbonTitle.textContent = selected;
-        }
         if (window.innerWidth <= 1024) {
           dashboardShell.classList.remove("sidebar-open");
         }
@@ -1166,7 +1418,11 @@
       if (!(target instanceof Node) || !userMenuPanel || !userMenuBtn) {
         return;
       }
-      if (!userMenuPanel.hasAttribute("hidden") && !userMenuPanel.contains(target) && !userMenuBtn.contains(target)) {
+      if (
+        !userMenuPanel.hasAttribute("hidden") &&
+        !userMenuPanel.contains(target) &&
+        !userMenuBtn.contains(target)
+      ) {
         userMenuPanel.setAttribute("hidden", "");
         userMenuBtn.setAttribute("aria-expanded", "false");
       }
@@ -1181,8 +1437,16 @@
 
     refreshAlertsBtn?.addEventListener("click", cycleAlerts);
     refreshRecentBtn?.addEventListener("click", cycleRecentAlerts);
+    heroRefreshBtn?.addEventListener("click", () => {
+      const profile = orgProfiles[orgIndex];
+      profile.lastSyncMinutes = 1;
+      alertsRotation += 1;
+      recentRotation += 1;
+      renderFeeds();
+      updateOrgView();
+    });
 
-    newAlertsList.addEventListener("click", (event) => {
+    const handleInvestigationAction = (event) => {
       const target = event.target;
       if (!(target instanceof Element)) {
         return;
@@ -1201,11 +1465,12 @@
         text: "Escalated to investigation from dashboard feed."
       });
       redirect(`alert-details.html?id=${id}`);
-    });
+    };
 
-    renderNewAlerts(baseNewAlerts);
-    renderFindings(baseFindings);
-    renderRecentAlerts(baseRecentAlerts);
+    newAlertsList.addEventListener("click", handleInvestigationAction);
+    recentAlertsList.addEventListener("click", handleInvestigationAction);
+
+    renderFeeds();
     updateUserIdentity();
     updateOrgView();
     applySearch();
@@ -1213,13 +1478,13 @@
     window.setInterval(() => {
       const profile = orgProfiles[orgIndex];
       const delta = Math.random() > 0.5 ? 1 : -1;
-      profile.mentions = Math.max(20, profile.mentions + delta * 2);
-      profile.activeAlerts = Math.max(6, Math.min(80, profile.activeAlerts + (Math.random() > 0.45 ? 1 : -1)));
+      profile.leakMentions = Math.max(48, profile.leakMentions + delta * 2);
       profile.riskScore = Math.max(48, Math.min(92, profile.riskScore + delta));
+      profile.suspiciousDomains = Math.max(4, profile.suspiciousDomains + (Math.random() > 0.55 ? 1 : 0));
+      profile.lastSyncMinutes = Math.min(59, profile.lastSyncMinutes + 1);
       updateOrgView();
     }, 9000);
   };
-
   const initAlertsPage = () => {
     const session = getSession();
     if (!session) {
@@ -4420,3 +4685,4 @@
     initLoginPage();
   });
 })();
+

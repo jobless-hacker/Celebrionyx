@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="dashboard-page" data-page="dashboard">
+<body class="dashboard-page page-dashboard" data-page="dashboard">
   <div class="dashboard-shell">
     <aside class="dashboard-sidebar" id="dashboardSidebar">
       <header class="sidebar-brand">
@@ -37,9 +37,8 @@
         <button class="side-nav-item" data-view="organization" type="button">
           <span class="side-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/>
-              <circle cx="12" cy="12" r="2.8" fill="none" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M12 3v4M21 12h-4M12 21v-4M3 12h4" stroke="currentColor" stroke-width="1.7"/>
+              <rect x="5" y="4" width="14" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
             </svg>
           </span>
           <span class="nav-label">Organization</span>
@@ -65,30 +64,10 @@
         <button class="side-nav-item" data-view="flow" type="button">
           <span class="side-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
-              <rect x="3" y="5" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M3 14l5-3 4 2 4-4 5 3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M3 12h5l2-4 4 8 2-4h5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
           <span class="nav-label">Live Data Flow</span>
-        </button>
-        <button class="side-nav-item" data-view="reports" type="button">
-          <span class="side-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M6 3h10l4 4v14H6z" fill="none" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M16 3v5h5" fill="none" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M9 13h6M9 17h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-            </svg>
-          </span>
-          <span class="nav-label">Reports</span>
-        </button>
-        <button class="side-nav-item" data-view="sources" type="button">
-          <span class="side-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 3l8 4.6v8.8L12 21l-8-4.6V7.6z" fill="none" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M4 8l8 4.5L20 8" fill="none" stroke="currentColor" stroke-width="1.7"/>
-            </svg>
-          </span>
-          <span class="nav-label">Sources</span>
         </button>
         <button class="side-nav-item" data-view="settings" type="button">
           <span class="side-icon" aria-hidden="true">
@@ -157,13 +136,70 @@
       </header>
 
       <section class="dashboard-content">
-        <header class="section-ribbon">
-          <h3>Risk Score</h3>
-        </header>
+        <section class="dashboard-hero intel-panel" aria-label="Organization Overview">
+          <div class="dashboard-org-meta">
+            <p class="hero-kicker">Organization Context</p>
+            <h3 id="dashboardOrgName">Acme Corporation</h3>
+            <p class="dashboard-domain" id="heroOrgDomain">acme-corp.com</p>
+            <div class="dashboard-status">
+              <span id="monitoringStatusBadge" class="monitoring-badge">Monitoring Active</span>
+              <span class="sync-time">Last synced: <strong id="heroLastSync">5 min ago</strong></span>
+            </div>
+          </div>
+          <div class="dashboard-actions">
+            <button id="heroRefreshBtn" class="hero-action-btn" type="button">Refresh Intelligence</button>
+            <a class="hero-action-btn ghost" href="alerts.html">Open Alerts</a>
+          </div>
+        </section>
 
-        <section class="dashboard-grid" aria-label="Threat dashboard grid">
-          <article class="intel-card risk-card">
-            <h4>Risk Score</h4>
+        <section class="dashboard-kpi-grid" aria-label="Primary KPI Metrics">
+          <article class="kpi-card kpi-card-risk">
+            <p class="kpi-title">Risk Score</p>
+            <p class="kpi-value" id="kpiRiskScore">82</p>
+            <p class="kpi-meta" id="kpiRiskMeta">High Risk - Elevated credential exposure</p>
+          </article>
+          <article class="kpi-card">
+            <p class="kpi-title">Active Alerts</p>
+            <p class="kpi-value" id="kpiActiveAlerts">32</p>
+            <p class="kpi-meta">Unresolved alerts across all monitored sources</p>
+          </article>
+          <article class="kpi-card">
+            <p class="kpi-title">Critical Alerts</p>
+            <p class="kpi-value danger" id="kpiCriticalAlerts">8</p>
+            <p class="kpi-meta">Immediate triage required by SOC team</p>
+          </article>
+          <article class="kpi-card">
+            <p class="kpi-title">New Findings (24h)</p>
+            <p class="kpi-value" id="kpiNewFindings">19</p>
+            <p class="kpi-meta">Fresh intelligence mentions in the last day</p>
+          </article>
+        </section>
+
+        <section class="dashboard-secondary-grid" aria-label="Secondary KPI Metrics">
+          <article class="metric-card">
+            <p class="metric-label">Monitored Sources</p>
+            <p class="metric-value" id="kpiMonitoredSources">156</p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">Leak Mentions</p>
+            <p class="metric-value" id="kpiLeakMentions">128</p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">Suspicious Domains</p>
+            <p class="metric-value" id="kpiSuspiciousDomains">26</p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">Exposed Assets</p>
+            <p class="metric-value" id="kpiExposedAssets">17</p>
+          </article>
+        </section>
+
+        <section class="dashboard-main-grid" aria-label="Risk and Intelligence Insights">
+          <article class="intel-panel risk-card">
+            <div class="card-head">
+              <h4>Risk Score</h4>
+              <span class="risk-context">Threat Surface Summary</span>
+            </div>
             <div class="risk-card-layout">
               <div class="risk-meter-wrap">
                 <div class="risk-meter" id="riskMeter">
@@ -172,39 +208,31 @@
                     <span id="riskScoreLabel">High Risk</span>
                   </div>
                 </div>
-                <p class="risk-chip"><span id="riskEntityLabel">amity + silvers</span></p>
-                <p class="metric-line">AFFECTED ASSETS <strong id="affectedAssets">17</strong></p>
+                <p class="risk-chip" id="riskEntityLabel">acme-corp + brand assets</p>
+                <p class="metric-line">Affected assets <strong id="affectedAssets">17</strong></p>
               </div>
-              <div class="risk-stats">
-                <section>
-                  <h5>Active Alerts</h5>
-                  <div class="big-inline-stats">
-                    <strong class="num-danger" id="activeAlertsCount">32</strong>
-                    <strong id="activeMentionsCount">128</strong>
-                  </div>
-                  <p>Mentions in last 24h <span class="percent-up" id="mentionsDelta">+15.1%</span></p>
-                </section>
-                <section>
-                  <h5>Top Sources</h5>
-                  <div class="source-inline">
-                    <p><strong id="surfaceCount">156</strong><span>Surface Web</span></p>
-                    <p><strong id="darkCount">32</strong><span>Dark Web</span></p>
-                  </div>
-                </section>
+              <div class="risk-meta">
+                <p class="risk-meta-title">Risk Drivers</p>
+                <p id="riskContextCopy">Credential leaks and typosquatting activity increased in the last 24 hours.</p>
+                <ul class="risk-mini-list">
+                  <li><span>Active alerts</span><strong id="activeAlertsCount">32</strong></li>
+                  <li><span>Leak mentions</span><strong id="activeMentionsCount">128</strong></li>
+                  <li><span>24h delta</span><strong class="good" id="mentionsDelta">+15.1%</strong></li>
+                </ul>
               </div>
             </div>
           </article>
 
-          <article class="intel-card trend-card">
-            <div class="card-head">
+          <article class="intel-panel trend-card">
+            <div class="card-head trend-header">
               <h4>Threat Intelligence Trends</h4>
-              <div class="period-switch" id="periodSwitch">
+              <div class="period-switch trend-filters" id="periodSwitch">
                 <button type="button" data-period="24h">24h</button>
                 <button type="button" data-period="7d">7d</button>
                 <button type="button" class="active" data-period="30d">30d</button>
               </div>
             </div>
-            <div class="chart-wrap">
+            <div class="trend-chart chart-wrap">
               <svg id="trendChart" viewBox="0 0 720 280" role="img" aria-label="Threat trend chart">
                 <g id="trendGrid"></g>
                 <g id="trendYLabels"></g>
@@ -217,46 +245,77 @@
             </div>
           </article>
 
-          <article class="intel-card new-alerts-card">
+          <article class="intel-panel source-card">
             <div class="card-head">
-              <h4>New Alerts</h4>
-              <button id="refreshAlertsBtn" class="small-link-btn" type="button">5m</button>
+              <h4>Source Breakdown</h4>
+              <span class="source-period">30d</span>
             </div>
-            <ul id="newAlertsList" class="feed-list" aria-label="New alerts"></ul>
-          </article>
-
-          <article class="intel-card source-card">
-            <h4>Source Breakdown</h4>
             <div class="source-breakdown-layout">
-              <div class="source-donut" id="sourceDonut">
+              <div class="source-donut" id="sourceDonut" aria-hidden="true">
                 <div>
-                  <strong id="darkPercentLabel">65%</strong>
-                  <span>Dark Web</span>
+                  <strong id="sourceTotalPercent">100%</strong>
+                  <span>Coverage</span>
                 </div>
               </div>
-              <div class="source-legend">
-                <p><i class="dot dot-surface"></i>Surface Web <strong id="surfacePercentLabel">35%</strong></p>
-                <p><i class="dot dot-dark"></i>Dark Web <strong id="darkWebPercentLabel">65%</strong></p>
-                <p class="growth-row"><span id="growthDelta">+35%</span> growth</p>
-              </div>
-            </div>
-            <div class="flag-box">
-              <span class="flag-icon" aria-hidden="true">!</span>
-              <p><strong>Suspicious Domains</strong><span id="suspiciousDomainsCount">+26</span> New detections this week</p>
+              <ul class="source-legend">
+                <li class="source-item"><span class="dot dot-surface"></span><span>Surface Web</span><strong id="sourceSurfaceValue">35%</strong></li>
+                <li class="source-item"><span class="dot dot-leak"></span><span>Leak Sources</span><strong id="sourceLeakValue">27%</strong></li>
+                <li class="source-item"><span class="dot dot-domain"></span><span>Domain Monitoring</span><strong id="sourceDomainValue">18%</strong></li>
+                <li class="source-item"><span class="dot dot-document"></span><span>Document Mentions</span><strong id="sourceDocumentValue">11%</strong></li>
+                <li class="source-item"><span class="dot dot-brand"></span><span>Brand Abuse</span><strong id="sourceBrandValue">9%</strong></li>
+              </ul>
             </div>
           </article>
+        </section>
 
-          <article class="intel-card findings-card">
-            <h4>Latest Findings</h4>
-            <ul id="findingsList" class="finding-list" aria-label="Latest findings"></ul>
+        <section class="dashboard-bottom-grid" aria-label="Operational Feed Widgets">
+          <article class="intel-panel findings-card">
+            <div class="card-head">
+              <h4>Latest Findings</h4>
+              <span class="subtle-note">Intelligence Feed</span>
+            </div>
+            <ul id="findingsList" class="findings-list" aria-label="Latest findings"></ul>
           </article>
 
-          <article class="intel-card recent-alerts-card">
+          <article class="intel-panel alerts-card">
+            <div class="card-head">
+              <h4>Priority Alerts</h4>
+              <button id="refreshAlertsBtn" class="small-link-btn" type="button">Refresh</button>
+            </div>
+            <ul id="newAlertsList" class="alerts-list" aria-label="Priority alerts"></ul>
+          </article>
+
+          <article class="intel-panel recent-alerts-card">
             <div class="card-head">
               <h4>Recent Alerts</h4>
-              <button id="refreshRecentBtn" class="small-link-btn" type="button">5m</button>
+              <button id="refreshRecentBtn" class="small-link-btn" type="button">Refresh</button>
             </div>
-            <ul id="recentAlertsList" class="recent-list" aria-label="Recent alerts"></ul>
+            <ul id="recentAlertsList" class="recent-alerts-list" aria-label="Recent alerts"></ul>
+          </article>
+
+          <article class="intel-panel status-summary-card">
+            <div class="card-head">
+              <h4>Alert Status Summary</h4>
+              <span class="subtle-note">Lifecycle</span>
+            </div>
+            <div class="status-grid">
+              <div class="status-item new">
+                <span class="status-label">New</span>
+                <strong class="status-count" id="statusNewCount">0</strong>
+              </div>
+              <div class="status-item investigating">
+                <span class="status-label">Investigating</span>
+                <strong class="status-count" id="statusInvestigatingCount">0</strong>
+              </div>
+              <div class="status-item confirmed">
+                <span class="status-label">Confirmed</span>
+                <strong class="status-count" id="statusConfirmedCount">0</strong>
+              </div>
+              <div class="status-item resolved">
+                <span class="status-label">Resolved</span>
+                <strong class="status-count" id="statusResolvedCount">0</strong>
+              </div>
+            </div>
           </article>
         </section>
       </section>

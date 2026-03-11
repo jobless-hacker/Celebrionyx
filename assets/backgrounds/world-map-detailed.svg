@@ -1,0 +1,106 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <radialGradient id="dotGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7dd3fc" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.15"/>
+    </radialGradient>
+
+    <symbol id="dot">
+      <circle cx="0" cy="0" r="2.2" fill="url(#dotGlow)"/>
+    </symbol>
+
+    <symbol id="dotSmall">
+      <circle cx="0" cy="0" r="1.4" fill="#93c5fd" opacity="0.7"/>
+    </symbol>
+  </defs>
+
+  <rect width="1600" height="900" fill="transparent"/>
+
+  <!-- North America -->
+  <g opacity="0.85" filter="url(#softGlow)">
+    <use href="#dot" x="130" y="220"/><use href="#dotSmall" x="155" y="210"/><use href="#dot" x="180" y="200"/>
+    <use href="#dotSmall" x="205" y="195"/><use href="#dot" x="230" y="205"/><use href="#dotSmall" x="255" y="225"/>
+    <use href="#dot" x="280" y="240"/><use href="#dotSmall" x="300" y="255"/><use href="#dot" x="320" y="235"/>
+    <use href="#dotSmall" x="345" y="225"/><use href="#dot" x="370" y="220"/><use href="#dotSmall" x="395" y="230"/>
+    <use href="#dot" x="410" y="255"/><use href="#dotSmall" x="390" y="275"/><use href="#dot" x="360" y="285"/>
+    <use href="#dotSmall" x="330" y="290"/><use href="#dot" x="300" y="300"/><use href="#dotSmall" x="270" y="295"/>
+    <use href="#dot" x="240" y="280"/><use href="#dotSmall" x="210" y="265"/><use href="#dot" x="180" y="250"/>
+  </g>
+
+  <!-- Central America -->
+  <g opacity="0.78" filter="url(#softGlow)">
+    <use href="#dotSmall" x="390" y="305"/><use href="#dot" x="410" y="320"/><use href="#dotSmall" x="430" y="340"/>
+    <use href="#dot" x="445" y="360"/><use href="#dotSmall" x="460" y="380"/>
+  </g>
+
+  <!-- South America -->
+  <g opacity="0.82" filter="url(#softGlow)">
+    <use href="#dot" x="455" y="405"/><use href="#dotSmall" x="470" y="430"/><use href="#dot" x="485" y="455"/>
+    <use href="#dotSmall" x="500" y="485"/><use href="#dot" x="515" y="520"/><use href="#dotSmall" x="525" y="555"/>
+    <use href="#dot" x="530" y="590"/><use href="#dotSmall" x="520" y="625"/><use href="#dot" x="505" y="655"/>
+    <use href="#dotSmall" x="485" y="680"/><use href="#dot" x="465" y="705"/><use href="#dotSmall" x="445" y="725"/>
+    <use href="#dotSmall" x="495" y="610"/><use href="#dotSmall" x="475" y="560"/><use href="#dotSmall" x="460" y="510"/>
+  </g>
+
+  <!-- Europe -->
+  <g opacity="0.9" filter="url(#softGlow)">
+    <use href="#dot" x="760" y="200"/><use href="#dotSmall" x="780" y="190"/><use href="#dot" x="800" y="185"/>
+    <use href="#dotSmall" x="820" y="190"/><use href="#dot" x="840" y="205"/><use href="#dotSmall" x="860" y="220"/>
+    <use href="#dot" x="845" y="240"/><use href="#dotSmall" x="820" y="245"/><use href="#dot" x="795" y="235"/>
+    <use href="#dotSmall" x="775" y="225"/>
+  </g>
+
+  <!-- Africa -->
+  <g opacity="0.86" filter="url(#softGlow)">
+    <use href="#dot" x="790" y="280"/><use href="#dotSmall" x="810" y="305"/><use href="#dot" x="825" y="335"/>
+    <use href="#dotSmall" x="840" y="370"/><use href="#dot" x="850" y="405"/><use href="#dotSmall" x="855" y="440"/>
+    <use href="#dot" x="850" y="475"/><use href="#dotSmall" x="835" y="510"/><use href="#dot" x="820" y="545"/>
+    <use href="#dotSmall" x="800" y="575"/><use href="#dot" x="780" y="600"/><use href="#dotSmall" x="760" y="625"/>
+    <use href="#dotSmall" x="775" y="350"/><use href="#dotSmall" x="790" y="400"/><use href="#dotSmall" x="805" y="455"/>
+  </g>
+
+  <!-- Middle East / West Asia -->
+  <g opacity="0.82" filter="url(#softGlow)">
+    <use href="#dotSmall" x="875" y="235"/><use href="#dot" x="900" y="245"/><use href="#dotSmall" x="925" y="255"/>
+    <use href="#dot" x="950" y="270"/><use href="#dotSmall" x="975" y="285"/>
+  </g>
+
+  <!-- Asia -->
+  <g opacity="0.9" filter="url(#softGlow)">
+    <use href="#dot" x="930" y="180"/><use href="#dotSmall" x="960" y="170"/><use href="#dot" x="990" y="165"/>
+    <use href="#dotSmall" x="1020" y="170"/><use href="#dot" x="1050" y="180"/><use href="#dotSmall" x="1080" y="195"/>
+    <use href="#dot" x="1110" y="210"/><use href="#dotSmall" x="1140" y="225"/><use href="#dot" x="1170" y="240"/>
+    <use href="#dotSmall" x="1200" y="255"/><use href="#dot" x="1230" y="275"/><use href="#dotSmall" x="1260" y="295"/>
+    <use href="#dot" x="1285" y="320"/><use href="#dotSmall" x="1300" y="350"/><use href="#dot" x="1275" y="370"/>
+    <use href="#dotSmall" x="1240" y="375"/><use href="#dot" x="1205" y="365"/><use href="#dotSmall" x="1170" y="350"/>
+    <use href="#dot" x="1135" y="335"/><use href="#dotSmall" x="1100" y="320"/><use href="#dot" x="1065" y="305"/>
+    <use href="#dotSmall" x="1030" y="290"/><use href="#dot" x="995" y="275"/><use href="#dotSmall" x="965" y="255"/>
+    <use href="#dotSmall" x="1095" y="245"/><use href="#dotSmall" x="1150" y="270"/><use href="#dotSmall" x="1215" y="305"/>
+  </g>
+
+  <!-- Japan / East Islands -->
+  <g opacity="0.88" filter="url(#softGlow)">
+    <use href="#dotSmall" x="1325" y="285"/><use href="#dot" x="1345" y="305"/><use href="#dotSmall" x="1360" y="330"/>
+  </g>
+
+  <!-- Australia -->
+  <g opacity="0.85" filter="url(#softGlow)">
+    <use href="#dot" x="1210" y="610"/><use href="#dotSmall" x="1240" y="600"/><use href="#dot" x="1270" y="605"/>
+    <use href="#dotSmall" x="1300" y="620"/><use href="#dot" x="1320" y="645"/><use href="#dotSmall" x="1305" y="670"/>
+    <use href="#dot" x="1275" y="680"/><use href="#dotSmall" x="1245" y="675"/><use href="#dot" x="1215" y="655"/>
+  </g>
+
+  <!-- Sparse connecting dots -->
+  <g opacity="0.4">
+    <use href="#dotSmall" x="620" y="120"/><use href="#dotSmall" x="700" y="150"/><use href="#dotSmall" x="880" y="140"/>
+    <use href="#dotSmall" x="1450" y="260"/><use href="#dotSmall" x="1400" y="580"/><use href="#dotSmall" x="980" y="720"/>
+  </g>
+</svg>

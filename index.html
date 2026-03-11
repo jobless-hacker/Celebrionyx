@@ -9,22 +9,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="login-page" data-page="login">
+<body class="page-login" data-page="login">
+  <div class="login-bg" aria-hidden="true">
+    <div class="login-bg-map"></div>
+    <div class="login-bg-lines"></div>
+    <div class="login-bg-grid"></div>
+    <div class="login-bg-glow"></div>
+  </div>
+
   <main class="auth-shell login-container">
     <header class="brand-header login-brand">
       <div class="brand-row">
-        <svg class="shield-icon login-logo" viewBox="0 0 64 64" aria-hidden="true">
-          <defs>
-            <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#d9ecff"/>
-              <stop offset="100%" stop-color="#5aa2ff"/>
-            </linearGradient>
-          </defs>
-          <path d="M32 4L54 12v18c0 14-8 25-22 30C18 55 10 44 10 30V12L32 4z" fill="none" stroke="url(#shieldGradient)" stroke-width="3"/>
-          <path d="M32 12v40M20 24h8M36 32h8M24 40h10" stroke="#9fd2ff" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="28" cy="24" r="2.4" fill="#dff2ff"/>
-          <circle cx="42" cy="32" r="2.4" fill="#dff2ff"/>
-        </svg>
+        <div class="login-logo" aria-hidden="true">
+          <span class="login-logo-glow"></span>
+          <svg class="login-logo-mark" viewBox="0 0 64 64">
+            <path d="M32 4L54 12v18c0 14-8 25-22 30C18 55 10 44 10 30V12L32 4z" fill="none" stroke="currentColor" stroke-width="3"/>
+            <path d="M32 12v40M21 22h8M36 31h8M24 40h10" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M21 22l11 10M32 32l4-1M32 32l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="21" cy="22" r="2.3" fill="currentColor"/>
+            <circle cx="32" cy="32" r="2.3" fill="currentColor"/>
+            <circle cx="44" cy="31" r="2.3" fill="currentColor"/>
+            <circle cx="24" cy="40" r="2.3" fill="currentColor"/>
+          </svg>
+        </div>
         <div class="brand-copy">
           <h1 class="login-title">INTELLIGENCE</h1>
           <p class="login-tagline">DASHBOARD</p>
@@ -37,7 +44,7 @@
     </div>
 
     <section class="form-panel login-card">
-      <h2>Sign In</h2>
+      <h2 class="login-heading">Sign In</h2>
 
       <form id="loginForm" class="login-form" novalidate>
         <div class="field form-group">
@@ -89,7 +96,7 @@
         Need help?
         <a href="mailto:support@intelligence.local">Contact support</a>.
       </p>
-      <p class="hint">
+      <p class="hint login-demo">
         Demo login: <strong>analyst@intelligence.local</strong> / <strong>ThreatWatch@2026</strong>
       </p>
     </section>

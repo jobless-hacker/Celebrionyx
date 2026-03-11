@@ -1,88 +1,79 @@
-.login-page .login-form .field,
-.login-page .login-form .form-group {
+.field,
+.form-group {
   margin-bottom: 1rem;
 }
 
-.login-page .login-form .field label,
-.login-page .login-form .form-group label {
+.field label,
+.form-group label {
   display: inline-block;
   margin-bottom: 0.45rem;
-  font-size: 1.95rem;
-  font-family: "Rajdhani", sans-serif;
   font-weight: 600;
-  color: #d5e9ff;
 }
 
-.login-page .login-form .input-wrap,
-.login-page .login-form .input-field {
+.input-wrap,
+.input-field {
   display: flex;
   align-items: center;
   gap: 0.55rem;
   border-radius: 11px;
   border: 1px solid rgba(145, 198, 255, 0.45);
-  background: linear-gradient(180deg, rgba(16, 46, 103, 0.78), rgba(20, 58, 122, 0.75));
-  box-shadow:
-    0 8px 16px rgba(3, 11, 33, 0.35),
-    inset 0 1px 0 rgba(196, 225, 255, 0.13);
   padding: 0.48rem 0.55rem;
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
-.login-page .login-form .input-wrap:focus-within,
-.login-page .login-form .input-field:focus-within {
-  border-color: #8fd1ff;
-  box-shadow:
-    0 0 0 2px rgba(74, 159, 255, 0.28),
-    0 8px 16px rgba(3, 11, 33, 0.38);
-  transform: translateY(-1px);
+.input-wrap:focus-within,
+.input-field:focus-within {
+  border-color: rgba(143, 209, 255, 0.9);
+  box-shadow: 0 0 0 2px rgba(74, 159, 255, 0.28);
 }
 
-.login-page .login-form .input-wrap.invalid,
-.login-page .login-form .input-field.invalid {
+.input-wrap.invalid,
+.input-field.invalid {
   border-color: rgba(255, 106, 118, 0.95);
-  box-shadow:
-    0 0 0 2px rgba(255, 106, 118, 0.22),
-    inset 0 1px 0 rgba(255, 220, 223, 0.17);
+  box-shadow: 0 0 0 2px rgba(255, 106, 118, 0.22);
 }
 
-.login-page .login-form .field-icon {
+.field-icon {
   display: grid;
   place-items: center;
   width: 36px;
   height: 36px;
-  color: #b5d8ff;
   flex: 0 0 auto;
 }
 
-.login-page .login-form .field-icon svg,
-.login-page .login-form .icon-button svg,
-.login-page .login-form .password-toggle svg {
+.field-icon svg,
+.icon-button svg,
+.password-toggle svg {
   width: 23px;
   height: 23px;
 }
 
-.login-page .login-form input[type="email"],
-.login-page .login-form input[type="password"],
-.login-page .login-form input[type="text"] {
+.input-field-control,
+.input-wrap input[type="email"],
+.input-wrap input[type="password"],
+.input-wrap input[type="text"],
+.input-field input[type="email"],
+.input-field input[type="password"],
+.input-field input[type="text"] {
   width: 100%;
+  min-width: 0;
   border: 0;
   outline: 0;
-  color: var(--text-main);
+  color: inherit;
   font: inherit;
-  font-size: 1.32rem;
   background: transparent;
   padding: 0.45rem 0;
 }
 
-.login-page .login-form input::placeholder {
+.input-wrap input::placeholder,
+.input-field input::placeholder {
   color: rgba(189, 214, 247, 0.86);
 }
 
-.login-page .login-form .icon-button,
-.login-page .login-form .password-toggle {
+.icon-button,
+.password-toggle {
   border: 0;
   background: transparent;
-  color: #c8e4ff;
   cursor: pointer;
   width: 36px;
   height: 36px;
@@ -92,17 +83,15 @@
   transition: background-color 170ms ease, color 170ms ease;
 }
 
-.login-page .login-form .icon-button:hover,
-.login-page .login-form .icon-button:focus-visible,
-.login-page .login-form .password-toggle:hover,
-.login-page .login-form .password-toggle:focus-visible {
-  background: rgba(112, 173, 255, 0.2);
-  color: #fff;
+.icon-button:hover,
+.icon-button:focus-visible,
+.password-toggle:hover,
+.password-toggle:focus-visible {
   outline: 0;
 }
 
-.login-page .login-options,
-.login-page .form-options {
+.login-options,
+.form-options {
   margin-top: 0.9rem;
   display: flex;
   align-items: center;
@@ -110,53 +99,44 @@
   gap: 1rem;
 }
 
-.login-page .remember,
-.login-page .remember-me {
+.remember,
+.remember-me {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text-soft);
-  font-size: 1.3rem;
   font-weight: 500;
 }
 
-.login-page .remember input[type="checkbox"],
-.login-page .remember-me input[type="checkbox"] {
+.remember input[type="checkbox"],
+.remember-me input[type="checkbox"] {
   width: 20px;
   height: 20px;
+  margin: 0;
   accent-color: var(--brand);
 }
 
-.login-page .form-options a,
-.login-page .support a,
-.login-page .forgot-password {
-  color: #8dc8ff;
+.form-options a,
+.support a,
+.forgot-password {
   text-decoration: underline;
   text-underline-offset: 3px;
-  font-size: 1.2rem;
 }
 
-.login-page .form-options a:hover,
-.login-page .support a:hover,
-.login-page .forgot-password:hover {
-  color: #dff1ff;
-}
-
-.login-page .form-message {
+.form-message {
   min-height: 1.25rem;
   margin: 0.65rem 0;
   font-size: 0.92rem;
   color: var(--text-soft);
 }
 
-.login-page .form-message.error {
+.form-message.error {
   color: var(--danger);
 }
 
-.login-page .form-message.success {
+.form-message.success {
   color: var(--ok);
 }
 
-.login-page .form-message.info {
+.form-message.info {
   color: #8dc6ff;
 }

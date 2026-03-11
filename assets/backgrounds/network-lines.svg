@@ -1,0 +1,45 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lineGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#60a5fa" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="arcGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7dd3fc" stop-opacity="0.05"/>
+      <stop offset="50%" stop-color="#60a5fa" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#7dd3fc" stop-opacity="0.05"/>
+    </linearGradient>
+
+    <filter id="blurLine">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+  </defs>
+
+  <g fill="none" stroke-linecap="round">
+    <path d="M180 235 C 420 120, 620 120, 795 210" stroke="url(#arcGlow)" stroke-width="2.2" filter="url(#blurLine)"/>
+    <path d="M795 210 C 970 140, 1110 160, 1260 300" stroke="url(#arcGlow)" stroke-width="2.2" filter="url(#blurLine)"/>
+    <path d="M430 340 C 560 280, 670 260, 810 335" stroke="url(#arcGlow)" stroke-width="1.8" filter="url(#blurLine)"/>
+    <path d="M810 335 C 950 315, 1110 330, 1275 620" stroke="url(#arcGlow)" stroke-width="1.8" filter="url(#blurLine)"/>
+    <path d="M460 430 C 520 520, 520 620, 470 705" stroke="url(#arcGlow)" stroke-width="1.8" filter="url(#blurLine)"/>
+    <path d="M845 240 C 900 250, 940 255, 995 275" stroke="url(#arcGlow)" stroke-width="1.6" filter="url(#blurLine)"/>
+  </g>
+
+  <g stroke="url(#lineGlow)" stroke-width="1">
+    <line x1="120" y1="760" x2="460" y2="760"/>
+    <line x1="1080" y1="140" x2="1450" y2="140"/>
+    <line x1="1180" y1="760" x2="1500" y2="760"/>
+  </g>
+
+  <g fill="#7dd3fc" opacity="0.55">
+    <circle cx="180" cy="235" r="3"/>
+    <circle cx="795" cy="210" r="3.5"/>
+    <circle cx="1260" cy="300" r="3"/>
+    <circle cx="430" cy="340" r="2.6"/>
+    <circle cx="810" cy="335" r="2.8"/>
+    <circle cx="1275" cy="620" r="3"/>
+    <circle cx="460" cy="430" r="2.4"/>
+    <circle cx="470" cy="705" r="2.4"/>
+  </g>
+</svg>
