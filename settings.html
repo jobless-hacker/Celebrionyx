@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intelligence Dashboard | Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dashboard-page settings-page" data-page="settings">
+  <div class="settings-shell">
+    <aside class="settings-sidebar" id="settingsSidebar">
+      <header class="sidebar-brand">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M32 4L54 12v18c0 14-8 25-22 30C18 55 10 44 10 30V12L32 4z" fill="none" stroke="#9fd2ff" stroke-width="3"/>
+          <path d="M32 12v40M20 24h8M36 32h8M24 40h10" stroke="#e2f2ff" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h1>INTELLIGENCE</h1>
+          <p>DASHBOARD</p>
+        </div>
+      </header>
+
+      <nav class="settings-side-nav" id="settingsSideNav" aria-label="Settings sidebar">
+        <button class="settings-nav-item" data-route="dashboard.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="13" y="3" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="3" y="13" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="13" y="13" width="8" height="8" rx="1.5" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="nav-label">Dashboard</span>
+        </button>
+
+        <button class="settings-nav-item" data-route="alerts.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3L2 20h20L12 3z" fill="currentColor"/>
+              <path d="M12 9v5M12 17v.2" stroke="#0a2254" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Alerts</span>
+        </button>
+
+        <button class="settings-nav-item" data-route="data-flow.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 12h5l2-4 4 8 2-4h5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Data Flow</span>
+        </button>
+
+        <button class="settings-nav-item" data-route="organization.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="5" y="4" width="14" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Organization</span>
+        </button>
+
+        <button class="settings-nav-item" data-route="findings.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 16v-4M10 20V8M14 16V4M18 20v-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Findings</span>
+        </button>
+
+        <button class="settings-nav-item active" data-route="settings.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 8.2A3.8 3.8 0 1112 16a3.8 3.8 0 010-7.8z" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M4 13.8v-3.6l2.1-.5c.2-.7.5-1.3.9-1.9L5.9 6.1l2.6-2.6 1.7 1.2c.6-.4 1.2-.7 1.9-.9L12.6 2h3.6l.5 2.1c.7.2 1.3.5 1.9.9l1.7-1.2 2.6 2.6-1.2 1.7c.4.6.7 1.2.9 1.9L24 10.2v3.6l-2.1.5c-.2.7-.5 1.3-.9 1.9l1.2 1.7-2.6 2.6-1.7-1.2c-.6.4-1.2.7-1.9.9l-.5 2.1h-3.6l-.5-2.1c-.7-.2-1.3-.5-1.9-.9l-1.7 1.2-2.6-2.6 1.2-1.7a8 8 0 01-.9-1.9L4 13.8z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+            </svg>
+          </span>
+          <span class="nav-label">Settings</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="settings-main">
+      <header class="settings-topbar">
+        <div class="settings-title-wrap">
+          <button id="settingsMobileMenuBtn" class="mobile-nav-btn" type="button" aria-label="Open menu">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div>
+            <h2>Settings</h2>
+            <button id="settingsOrgSwitcher" class="org-switcher" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.6"/>
+              </svg>
+              <span id="settingsOrgLabel">acme-corp.com</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-top-actions">
+          <label class="settings-search-top">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.9"/>
+              <path d="M20 20l-4.1-4.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+            <input id="settingsTopSearch" type="search" placeholder="Search">
+          </label>
+          <button class="circle-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3a5 5 0 00-5 5v2.7c0 .8-.2 1.6-.7 2.3L5 15h14l-1.3-2c-.5-.7-.7-1.5-.7-2.3V8a5 5 0 00-5-5z" fill="currentColor"/>
+            </svg>
+            <span class="notify-count">2</span>
+          </button>
+          <button id="settingsUserBtn" class="alerts-avatar-btn" type="button" aria-label="User menu">
+            <span id="settingsUserInitial">JD</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="settings-content">
+        <article class="settings-card">
+          <div class="settings-tabs" id="settingsTabs">
+            <button type="button" class="active" data-tab="general">General</button>
+            <button type="button" data-tab="notifications">Notifications</button>
+            <button type="button" data-tab="sources">Sources</button>
+            <button type="button" data-tab="watchlist">Watchlist</button>
+            <button type="button" data-tab="users">Users</button>
+            <button type="button" data-tab="integrations">Integrations</button>
+          </div>
+
+          <p id="settingsStatusMsg" class="settings-status-msg"></p>
+          <p id="settingsNoResults" class="settings-no-results is-hidden">No settings sections match your current tab or search.</p>
+
+          <div class="settings-grid">
+            <div class="settings-left-col">
+              <section class="settings-panel" data-settings-panel="general notifications sources watchlist users integrations">
+                <div class="settings-panel-head">
+                  <h3>Alert Thresholds</h3>
+                  <p>Adjust confidence threshold levels for generating alerts.</p>
+                </div>
+                <div class="settings-thresholds">
+                  <label class="settings-threshold-row" data-search="critical alerts threshold">
+                    <span class="threshold-name critical">Critical Alerts</span>
+                    <input id="criticalRange" type="range" min="40" max="99" value="80">
+                    <strong id="criticalValue">80%</strong>
+                  </label>
+                  <label class="settings-threshold-row" data-search="high alerts threshold">
+                    <span class="threshold-name high">High Alerts</span>
+                    <input id="highRange" type="range" min="30" max="90" value="60">
+                    <strong id="highValue">60%</strong>
+                  </label>
+                  <label class="settings-threshold-row" data-search="medium alerts threshold">
+                    <span class="threshold-name medium">Medium Alerts</span>
+                    <input id="mediumRange" type="range" min="20" max="85" value="50">
+                    <strong id="mediumValue">50%</strong>
+                  </label>
+                </div>
+                <div class="settings-inline-actions">
+                  <label class="inline-check" data-search="alert suppression">
+                    <input id="alertSuppressionChk" type="checkbox" checked>
+                    Alert Suppression
+                  </label>
+                  <label class="inline-select" data-search="suppress hours">
+                    Suppress within
+                    <select id="suppressionHours">
+                      <option value="1">1 hour</option>
+                      <option value="3">3 hours</option>
+                      <option value="6" selected>6 hours</option>
+                      <option value="12">12 hours</option>
+                    </select>
+                  </label>
+                  <button id="settingsTestEmailBtnMain" type="button">Test E-mail</button>
+                </div>
+              </section>
+
+              <section class="settings-panel" data-settings-panel="general sources">
+                <div class="settings-panel-head">
+                  <h3>Risk Scoring Preferences</h3>
+                  <p>Tune scoring weights for reducing false positives.</p>
+                </div>
+                <div class="settings-risk-rows">
+                  <label class="settings-threshold-row" data-search="severity sensitivity">
+                    <span class="threshold-name">Severity Sensitivity</span>
+                    <input id="severitySensitivityRange" type="range" min="30" max="100" value="80">
+                    <strong id="severitySensitivityValue">80%</strong>
+                  </label>
+                  <label class="settings-threshold-row" data-search="page length sensitivity">
+                    <span class="threshold-name">Page Length Sensitivity</span>
+                    <input id="pageLengthRange" type="range" min="20" max="90" value="60">
+                    <strong id="pageLengthValue">60%</strong>
+                  </label>
+                </div>
+              </section>
+
+              <section class="settings-panel" data-settings-panel="watchlist general">
+                <div class="settings-panel-head">
+                  <h3>Watchlist Keywords</h3>
+                  <p>Configure keywords for enhanced monitoring.</p>
+                </div>
+                <div class="settings-watchlist-input">
+                  <input id="watchKeywordInput" type="text" placeholder="Add keyword">
+                  <button id="addWatchKeywordBtn" type="button">Add</button>
+                </div>
+                <div id="watchKeywordTags" class="settings-watchlist-tags"></div>
+              </section>
+
+              <section class="settings-panel" data-settings-panel="general sources">
+                <div class="settings-panel-head">
+                  <h3>Pipeline Snapshot</h3>
+                  <p>Current processing state across pipeline stages.</p>
+                </div>
+                <div class="settings-stage-grid">
+                  <div class="settings-stage-cell">
+                    <span>Ingestion</span>
+                    <strong id="settingsStageIngestion">212 New</strong>
+                  </div>
+                  <div class="settings-stage-cell">
+                    <span>Normalization</span>
+                    <strong id="settingsStageNormalization">204 New</strong>
+                  </div>
+                  <div class="settings-stage-cell">
+                    <span>Enrichment</span>
+                    <strong id="settingsStageEnrichment">200 New</strong>
+                  </div>
+                  <div class="settings-stage-cell">
+                    <span>Scoring</span>
+                    <strong id="settingsStageScoring">199 New</strong>
+                  </div>
+                  <div class="settings-stage-cell">
+                    <span>Alerting</span>
+                    <strong id="settingsStageAlerting">198 New</strong>
+                  </div>
+                  <div class="settings-stage-cell">
+                    <span>State</span>
+                    <strong id="settingsStageState">102 Alerts</strong>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <div class="settings-right-col">
+              <section class="settings-side-panel" data-settings-panel="notifications general">
+                <h4>Notifications</h4>
+                <label class="side-check-row" data-search="web alerts">
+                  <input id="notifWeb" type="checkbox" checked>
+                  Web Alerts
+                </label>
+                <label class="side-check-row" data-search="email alerts">
+                  <input id="notifEmail" type="checkbox" checked>
+                  Email Alerts
+                </label>
+                <label class="side-check-row" data-search="daily summary">
+                  <input id="notifSummary" type="checkbox" checked>
+                  Daily Summary
+                </label>
+                <label class="side-input-row" data-search="email address">
+                  <span>Recipient</span>
+                  <input id="notifEmailTarget" type="email" value="admin@acme-corp.com">
+                </label>
+                <button id="settingsTestEmailBtnSide" type="button">Test E-mail</button>
+              </section>
+
+              <section class="settings-side-panel" data-settings-panel="sources general">
+                <h4>Source Management</h4>
+                <label class="side-toggle-row" data-search="surface web">
+                  <span>Surface Web</span>
+                  <input class="source-toggle" data-source="surface" type="checkbox" checked>
+                </label>
+                <label class="side-toggle-row" data-search="dark web">
+                  <span>Dark Web</span>
+                  <input class="source-toggle" data-source="dark" type="checkbox" checked>
+                </label>
+                <label class="side-toggle-row" data-search="domain monitoring">
+                  <span>Domain Monitoring</span>
+                  <input class="source-toggle" data-source="domain" type="checkbox" checked>
+                </label>
+                <label class="side-toggle-row" data-search="paste sites">
+                  <span>Paste Sites</span>
+                  <input class="source-toggle" data-source="paste" type="checkbox" checked>
+                </label>
+                <label class="side-toggle-row" data-search="leak forums">
+                  <span>Leak Forums</span>
+                  <input class="source-toggle" data-source="forums" type="checkbox" checked>
+                </label>
+              </section>
+
+              <section class="settings-side-panel" data-settings-panel="users general">
+                <h4>Account Settings</h4>
+                <p class="settings-account-id" id="settingsAccountEmail">john.doe@acme-corp.com</p>
+                <button id="changePasswordBtn" type="button">Change Password</button>
+              </section>
+
+              <section class="settings-side-panel" data-settings-panel="integrations general">
+                <h4>API / Webhooks</h4>
+                <p class="settings-api-key">Key: <code id="apiKeyValue">ak_live_3d92f9c8b7a0</code></p>
+                <div class="settings-api-actions">
+                  <button id="rotateApiKeyBtn" type="button">Rotate Key</button>
+                  <button id="manageWebhooksBtn" type="button">Manage Webhooks</button>
+                </div>
+              </section>
+
+              <section class="settings-side-panel" data-settings-panel="integrations sources general">
+                <h4>Source Settings</h4>
+                <button id="workHoursBtn" type="button">Work hours</button>
+                <button id="integrationsBtn" type="button">Integrations</button>
+              </section>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

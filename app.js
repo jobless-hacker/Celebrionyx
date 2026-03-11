@@ -728,8 +728,16 @@
           redirect("alerts.html");
           return;
         }
+        if (view === "flow") {
+          redirect("data-flow.html");
+          return;
+        }
         if (view === "findings") {
           redirect("findings.html");
+          return;
+        }
+        if (view === "settings") {
+          redirect("settings.html");
           return;
         }
         sidebarNav.querySelectorAll(".side-nav-item").forEach((item) => item.classList.remove("active"));
@@ -1840,6 +1848,967 @@
     render();
   };
 
+  const initSettingsPage = () => {
+    const session = getSession();
+    if (!session) {
+      redirect("index.html");
+      return;
+    }
+
+    const settingsShell = document.querySelector(".settings-shell");
+    const settingsSidebar = $("settingsSidebar");
+    const settingsSideNav = $("settingsSideNav");
+    const settingsMobileMenuBtn = $("settingsMobileMenuBtn");
+    const settingsOrgSwitcher = $("settingsOrgSwitcher");
+    const settingsOrgLabel = $("settingsOrgLabel");
+    const settingsTopSearch = $("settingsTopSearch");
+    const settingsUserInitial = $("settingsUserInitial");
+    const settingsTabs = $("settingsTabs");
+    const settingsStatusMsg = $("settingsStatusMsg");
+    const settingsNoResults = $("settingsNoResults");
+
+    const criticalRange = $("criticalRange");
+    const highRange = $("highRange");
+    const mediumRange = $("mediumRange");
+    const criticalValue = $("criticalValue");
+    const highValue = $("highValue");
+    const mediumValue = $("mediumValue");
+    const severitySensitivityRange = $("severitySensitivityRange");
+    const pageLengthRange = $("pageLengthRange");
+    const severitySensitivityValue = $("severitySensitivityValue");
+    const pageLengthValue = $("pageLengthValue");
+    const alertSuppressionChk = $("alertSuppressionChk");
+    const suppressionHours = $("suppressionHours");
+    const settingsTestEmailBtnMain = $("settingsTestEmailBtnMain");
+    const settingsTestEmailBtnSide = $("settingsTestEmailBtnSide");
+
+    const watchKeywordInput = $("watchKeywordInput");
+    const addWatchKeywordBtn = $("addWatchKeywordBtn");
+    const watchKeywordTags = $("watchKeywordTags");
+
+    const notifWeb = $("notifWeb");
+    const notifEmail = $("notifEmail");
+    const notifSummary = $("notifSummary");
+    const notifEmailTarget = $("notifEmailTarget");
+    const sourceToggles = Array.from(document.querySelectorAll(".source-toggle"));
+    const changePasswordBtn = $("changePasswordBtn");
+    const rotateApiKeyBtn = $("rotateApiKeyBtn");
+    const manageWebhooksBtn = $("manageWebhooksBtn");
+    const workHoursBtn = $("workHoursBtn");
+    const integrationsBtn = $("integrationsBtn");
+    const apiKeyValue = $("apiKeyValue");
+
+    const settingsStageIngestion = $("settingsStageIngestion");
+    const settingsStageNormalization = $("settingsStageNormalization");
+    const settingsStageEnrichment = $("settingsStageEnrichment");
+    const settingsStageScoring = $("settingsStageScoring");
+    const settingsStageAlerting = $("settingsStageAlerting");
+    const settingsStageState = $("settingsStageState");
+
+    if (
+      !settingsShell ||
+      !settingsSideNav ||
+      !settingsTabs ||
+      !criticalRange ||
+      !highRange ||
+      !mediumRange ||
+      !watchKeywordTags
+    ) {
+      return;
+    }
+
+    const domains = ["acme-corp.com", "northstar-finance.io", "orbital-grid.net"];
+    let activeTab = "general";
+    let searchTerm = "";
+    let watchKeywords = ["acme", "acmecorp", "credential", "data leak", "phishing", "darkweb"];
+
+    const setStatus = (message, type = "info") => {
+      if (!settingsStatusMsg) {
+        return;
+      }
+      settingsStatusMsg.textContent = message;
+      settingsStatusMsg.className = `settings-status-msg ${type}`.trim();
+    };
+
+    const updateRangeTexts = () => {
+      if (criticalValue) {
+        criticalValue.textContent = `${criticalRange.value}%`;
+      }
+      if (highValue) {
+        highValue.textContent = `${highRange.value}%`;
+      }
+      if (mediumValue) {
+        mediumValue.textContent = `${mediumRange.value}%`;
+      }
+      if (severitySensitivityValue && severitySensitivityRange) {
+        severitySensitivityValue.textContent = `${severitySensitivityRange.value}%`;
+      }
+      if (pageLengthValue && pageLengthRange) {
+        pageLengthValue.textContent = `${pageLengthRange.value}%`;
+      }
+    };
+
+    const updateStageSnapshot = () => {
+      const critical = Number(criticalRange.value);
+      const high = Number(highRange.value);
+      const medium = Number(mediumRange.value);
+      const severityWeight = Number(severitySensitivityRange?.value ?? 80);
+      const pageWeight = Number(pageLengthRange?.value ?? 60);
+      const enabledSources = sourceToggles.filter((toggle) => toggle.checked).length;
+
+      const ingestion = 150 + enabledSources * 12 + Math.round((critical + high + medium) / 10);
+      const normalization = Math.max(90, ingestion - 8 - Math.round(pageWeight / 25));
+      const enrichment = Math.max(80, normalization - 4 + Math.round(watchKeywords.length / 2));
+      const scoring = Math.max(75, enrichment - 3 + Math.round(severityWeight / 30));
+      const alerting = Math.max(40, Math.round((100 - critical) * 1.2 + (100 - high) + (100 - medium) * 0.8));
+      const stateAlerts = alerting + Math.max(8, Math.round(enabledSources * 1.5));
+
+      if (settingsStageIngestion) {
+        settingsStageIngestion.textContent = `${ingestion} New`;
+      }
+      if (settingsStageNormalization) {
+        settingsStageNormalization.textContent = `${normalization} New`;
+      }
+      if (settingsStageEnrichment) {
+        settingsStageEnrichment.textContent = `${enrichment} New`;
+      }
+      if (settingsStageScoring) {
+        settingsStageScoring.textContent = `${scoring} New`;
+      }
+      if (settingsStageAlerting) {
+        settingsStageAlerting.textContent = `${alerting} New`;
+      }
+      if (settingsStageState) {
+        settingsStageState.textContent = `${stateAlerts} Alerts`;
+      }
+    };
+
+    const renderWatchKeywords = () => {
+      watchKeywordTags.innerHTML = watchKeywords
+        .map(
+          (keyword) => `
+            <span class="watch-key-tag" data-key="${escapeHtml(keyword)}" data-search="${escapeHtml(keyword)}">
+              ${escapeHtml(keyword)}
+              <button type="button" class="watch-key-remove" data-key="${escapeHtml(keyword)}" aria-label="Remove ${escapeHtml(keyword)}">&times;</button>
+            </span>
+          `
+        )
+        .join("");
+    };
+
+    const applyPanelVisibility = () => {
+      const panels = Array.from(document.querySelectorAll(".settings-panel, .settings-side-panel"));
+      let visibleCount = 0;
+
+      panels.forEach((panel) => {
+        const raw = panel.getAttribute("data-settings-panel") ?? "general";
+        const tags = raw.split(/\s+/).filter(Boolean);
+        const matchesTab = activeTab === "general" || tags.includes(activeTab);
+        const panelText = panel.textContent?.toLowerCase() ?? "";
+        const matchesSearch = !searchTerm || panelText.includes(searchTerm);
+        const show = matchesTab && matchesSearch;
+        panel.classList.toggle("is-hidden", !show);
+        if (show) {
+          visibleCount += 1;
+        }
+      });
+
+      watchKeywordTags.querySelectorAll(".watch-key-tag").forEach((tag) => {
+        const value = (tag.getAttribute("data-search") ?? "").toLowerCase();
+        tag.classList.toggle("is-hidden", Boolean(searchTerm) && !value.includes(searchTerm));
+      });
+
+      if (settingsNoResults) {
+        settingsNoResults.classList.toggle("is-hidden", visibleCount > 0);
+      }
+    };
+
+    const queueTestEmail = () => {
+      const recipient = notifEmailTarget?.value.trim() || "admin@acme-corp.com";
+      setStatus(`Test email queued for ${recipient}.`, "success");
+    };
+
+    const randomKey = () => {
+      const part = () => Math.random().toString(16).slice(2, 6);
+      return `ak_live_${part()}${part()}${part()}`;
+    };
+
+    const addKeyword = () => {
+      const value = (watchKeywordInput?.value ?? "").trim().toLowerCase();
+      if (!value) {
+        return;
+      }
+      if (watchKeywords.includes(value)) {
+        setStatus(`Keyword "${value}" already exists.`, "error");
+        return;
+      }
+      watchKeywords.push(value);
+      if (watchKeywordInput) {
+        watchKeywordInput.value = "";
+      }
+      renderWatchKeywords();
+      applyPanelVisibility();
+      updateStageSnapshot();
+      setStatus(`Keyword "${value}" added to watchlist.`, "success");
+    };
+
+    settingsTabs.querySelectorAll("button[data-tab]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const tab = button.getAttribute("data-tab");
+        if (!tab) {
+          return;
+        }
+        activeTab = tab;
+        settingsTabs.querySelectorAll("button[data-tab]").forEach((item) => item.classList.toggle("active", item === button));
+        applyPanelVisibility();
+      });
+    });
+
+    settingsTopSearch?.addEventListener("input", () => {
+      searchTerm = settingsTopSearch.value.trim().toLowerCase();
+      applyPanelVisibility();
+    });
+
+    [criticalRange, highRange, mediumRange, severitySensitivityRange, pageLengthRange].forEach((input) => {
+      input?.addEventListener("input", () => {
+        updateRangeTexts();
+        updateStageSnapshot();
+      });
+    });
+
+    alertSuppressionChk?.addEventListener("change", () => {
+      setStatus(
+        alertSuppressionChk.checked
+          ? `Alert suppression enabled (${suppressionHours?.value ?? 6} hours).`
+          : "Alert suppression disabled.",
+        "info"
+      );
+    });
+
+    suppressionHours?.addEventListener("change", () => {
+      if (alertSuppressionChk?.checked) {
+        setStatus(`Alert suppression window set to ${suppressionHours.value} hours.`, "info");
+      }
+    });
+
+    settingsTestEmailBtnMain?.addEventListener("click", queueTestEmail);
+    settingsTestEmailBtnSide?.addEventListener("click", queueTestEmail);
+
+    addWatchKeywordBtn?.addEventListener("click", addKeyword);
+    watchKeywordInput?.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") {
+        return;
+      }
+      event.preventDefault();
+      addKeyword();
+    });
+
+    watchKeywordTags.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLButtonElement) || !target.classList.contains("watch-key-remove")) {
+        return;
+      }
+      const key = (target.getAttribute("data-key") ?? "").toLowerCase();
+      if (!key) {
+        return;
+      }
+      watchKeywords = watchKeywords.filter((keyword) => keyword !== key);
+      renderWatchKeywords();
+      applyPanelVisibility();
+      updateStageSnapshot();
+      setStatus(`Keyword "${key}" removed.`, "info");
+    });
+
+    [notifWeb, notifEmail, notifSummary].forEach((toggle) => {
+      toggle?.addEventListener("change", () => {
+        const enabled = [notifWeb, notifEmail, notifSummary].filter((item) => item?.checked).length;
+        setStatus(`${enabled} notification channels enabled.`, "info");
+      });
+    });
+
+    notifEmailTarget?.addEventListener("change", () => {
+      setStatus(`Notification recipient updated to ${notifEmailTarget.value.trim()}.`, "success");
+    });
+
+    sourceToggles.forEach((toggle) => {
+      toggle.addEventListener("change", () => {
+        const enabled = sourceToggles.filter((item) => item.checked).length;
+        updateStageSnapshot();
+        setStatus(`${enabled} threat sources enabled.`, "info");
+      });
+    });
+
+    changePasswordBtn?.addEventListener("click", () => {
+      setStatus("Password reset workflow triggered for current account.", "success");
+    });
+
+    rotateApiKeyBtn?.addEventListener("click", () => {
+      if (apiKeyValue) {
+        apiKeyValue.textContent = randomKey();
+      }
+      setStatus("API key rotated successfully.", "success");
+    });
+
+    manageWebhooksBtn?.addEventListener("click", () => {
+      setStatus("Webhook management opened. Review endpoints and signing keys.", "info");
+    });
+
+    workHoursBtn?.addEventListener("click", () => {
+      setStatus("Work hours profile updated for source scheduling.", "info");
+    });
+
+    integrationsBtn?.addEventListener("click", () => {
+      setStatus("Integration catalog opened for connector configuration.", "info");
+    });
+
+    settingsSideNav.querySelectorAll("button[data-route]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const route = button.getAttribute("data-route");
+        if (route && route !== "settings.html") {
+          redirect(route);
+        }
+      });
+    });
+
+    settingsMobileMenuBtn?.addEventListener("click", () => {
+      settingsShell.classList.toggle("sidebar-open");
+    });
+
+    document.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Node)) {
+        return;
+      }
+      if (
+        window.innerWidth <= 1024 &&
+        settingsShell.classList.contains("sidebar-open") &&
+        !settingsSidebar?.contains(target) &&
+        !settingsMobileMenuBtn?.contains(target)
+      ) {
+        settingsShell.classList.remove("sidebar-open");
+      }
+    });
+
+    settingsOrgSwitcher?.addEventListener("click", () => {
+      const currentIndex = domains.indexOf(settingsOrgLabel?.textContent ?? domains[0]);
+      const nextIndex = (currentIndex + 1 + domains.length) % domains.length;
+      if (settingsOrgLabel) {
+        settingsOrgLabel.textContent = domains[nextIndex];
+      }
+    });
+
+    if (settingsUserInitial) {
+      settingsUserInitial.textContent = getInitials(session.name);
+    }
+
+    window.setInterval(() => {
+      const bump = Math.random() > 0.5 ? 1 : -1;
+      const next = Math.max(45, Math.min(95, Number(criticalRange.value) + bump));
+      criticalRange.value = String(next);
+      updateRangeTexts();
+      updateStageSnapshot();
+    }, 12000);
+
+    renderWatchKeywords();
+    updateRangeTexts();
+    updateStageSnapshot();
+    applyPanelVisibility();
+    setStatus("Settings loaded. Changes are applied immediately for this demo.", "info");
+  };
+
+  const initDataFlowPage = () => {
+    const session = getSession();
+    if (!session) {
+      redirect("index.html");
+      return;
+    }
+
+    const dataFlowShell = document.querySelector(".dataflow-shell");
+    const dataFlowSidebar = $("dataFlowSidebar");
+    const dataFlowSideNav = $("dataFlowSideNav");
+    const dataFlowMobileMenuBtn = $("dataFlowMobileMenuBtn");
+    const dataFlowOrgSwitcher = $("dataFlowOrgSwitcher");
+    const dataFlowOrgLabel = $("dataFlowOrgLabel");
+    const dataFlowTopSearch = $("dataFlowTopSearch");
+    const dataFlowUserInitial = $("dataFlowUserInitial");
+
+    const flowStageGrid = $("flowStageGrid");
+    const dataFlowStateFilter = $("dataFlowStateFilter");
+    const dataFlowMarkIgnoredBtn = $("dataFlowMarkIgnoredBtn");
+    const dataFlowEventFilter = $("dataFlowEventFilter");
+    const dataFlowEventsList = $("dataFlowEventsList");
+    const dataFlowFindingsBody = $("dataFlowFindingsBody");
+    const dataFlowPager = $("dataFlowPager");
+    const dataFlowPagingInfo = $("dataFlowPagingInfo");
+
+    const dfTotalEvents = $("dfTotalEvents");
+    const dfProcessed5m = $("dfProcessed5m");
+    const dfBacklogCount = $("dfBacklogCount");
+    const dfMetricIngestion = $("dfMetricIngestion");
+    const dfMetricNormalization = $("dfMetricNormalization");
+    const dfMetricEnrichment = $("dfMetricEnrichment");
+    const dfMetricScoring = $("dfMetricScoring");
+    const dfMetricAlerting = $("dfMetricAlerting");
+    const dfMetricLatency = $("dfMetricLatency");
+    const dfMetricTotalAlerts = $("dfMetricTotalAlerts");
+
+    if (
+      !dataFlowShell ||
+      !flowStageGrid ||
+      !dataFlowEventsList ||
+      !dataFlowFindingsBody ||
+      !dataFlowPager ||
+      !dataFlowPagingInfo ||
+      !dataFlowEventFilter
+    ) {
+      return;
+    }
+
+    const stageLabels = {
+      all: "All",
+      collectors: "Collectors",
+      ingestion: "Ingestion",
+      normalization: "Normalization",
+      enrichment: "Enrichment",
+      scoring: "Scoring",
+      alerting: "Alerting"
+    };
+
+    const eventSeeds = [
+      {
+        category: "leak",
+        source: "Leak Site",
+        title: "Acme Corp Database for Sale on Dark Web",
+        detail: "Leak bundle references production database snapshots.",
+        stage: "ingestion",
+        state: "New"
+      },
+      {
+        category: "domain",
+        source: "Domain Monitor",
+        title: "New Typosquatting Domain Observed",
+        detail: "acme-c0rp-support.com served phishing payload.",
+        stage: "normalization",
+        state: "Updated"
+      },
+      {
+        category: "phishing",
+        source: "Mail Telemetry",
+        title: "Phishing Campaign Targeting Finance Team",
+        detail: "Sender spoofing executive approval template.",
+        stage: "enrichment",
+        state: "Ignored"
+      },
+      {
+        category: "vulnerability",
+        source: "Surface Web",
+        title: "Credential Dump Mentioned in Forum",
+        detail: "Forum thread links to leaked account records.",
+        stage: "scoring",
+        state: "New"
+      },
+      {
+        category: "domain",
+        source: "Registrar Feed",
+        title: "Internal Clone Domain Linked to Credential Harvesting",
+        detail: "Login mirror captures employee usernames.",
+        stage: "alerting",
+        state: "Updated"
+      },
+      {
+        category: "leak",
+        source: "Breach Forums",
+        title: "Internal Documents Offered in Auction Listing",
+        detail: "Actor claims access to policy and roadmap files.",
+        stage: "ingestion",
+        state: "Ignored"
+      },
+      {
+        category: "phishing",
+        source: "Security Gateway",
+        title: "Password Reset Lure Sent to Engineering Group",
+        detail: "Bulk campaign attempts account takeover workflow.",
+        stage: "normalization",
+        state: "New"
+      },
+      {
+        category: "vulnerability",
+        source: "Threat Feed",
+        title: "RDP Exposure Indicators Matched Asset Inventory",
+        detail: "Open service aligned with vulnerable patch baseline.",
+        stage: "scoring",
+        state: "Updated"
+      }
+    ];
+
+    const attributeByCategory = {
+      leak: "Credential Leak",
+      phishing: "Phishing",
+      domain: "Domain Abuse",
+      vulnerability: "Vulnerability Mention"
+    };
+
+    const stateValues = ["New", "Updated", "Ignored"];
+    const activeDomains = ["acme-corp.com", "northstar-finance.io", "orbital-grid.net"];
+
+    let liveEventCursor = 0;
+    let selectedStage = "all";
+    let selectedEventFilter = "all";
+    let stateFilter = "all";
+    let searchTerm = "";
+    let currentPage = 1;
+    const pageSize = 6;
+
+    const eventsData = Array.from({ length: 16 }, (_, index) => {
+      const seed = eventSeeds[index % eventSeeds.length];
+      return {
+        id: index + 1,
+        category: seed.category,
+        source: seed.source,
+        title: seed.title,
+        detail: seed.detail,
+        stage: seed.stage,
+        state: seed.state,
+        ageSeconds: 18 + index * 45,
+        ignoredSeen: seed.state !== "Ignored" ? true : index % 2 === 0
+      };
+    });
+
+    const findingsData = Array.from({ length: 34 }, (_, index) => {
+      const seed = eventSeeds[index % eventSeeds.length];
+      const similarityBase = 94 - ((index * 3) % 25);
+      const state = stateValues[(index + 1) % stateValues.length];
+      return {
+        id: index + 1,
+        event: seed.title,
+        source: seed.source,
+        attribute: attributeByCategory[seed.category] ?? "Signal",
+        category: seed.category,
+        stage: seed.stage,
+        similarity: Math.max(58, similarityBase),
+        ageSeconds: 120 + index * 170,
+        state,
+        ignoredSeen: state !== "Ignored" ? true : index % 2 === 0
+      };
+    });
+
+    const formatAge = (seconds) => {
+      const safe = Math.max(0, Math.round(seconds));
+      if (safe < 60) {
+        return `${safe}s ago`;
+      }
+      if (safe < 3600) {
+        return `${Math.floor(safe / 60)}m ago`;
+      }
+      if (safe < 86400) {
+        return `${Math.floor(safe / 3600)}h ago`;
+      }
+      return `${Math.floor(safe / 86400)}d ago`;
+    };
+
+    const getStateClass = (state) => String(state).toLowerCase().replaceAll(" ", "-");
+
+    const getFilteredEvents = () =>
+      eventsData.filter((item) => {
+        if (selectedEventFilter !== "all" && item.category !== selectedEventFilter) {
+          return false;
+        }
+        if (selectedStage !== "all" && item.stage !== selectedStage) {
+          return false;
+        }
+        if (searchTerm) {
+          const haystack = `${item.title} ${item.detail} ${item.source} ${item.category}`.toLowerCase();
+          if (!haystack.includes(searchTerm)) {
+            return false;
+          }
+        }
+        return true;
+      });
+
+    const getFilteredFindings = () =>
+      findingsData.filter((item) => {
+        if (stateFilter !== "all" && item.state !== stateFilter) {
+          return false;
+        }
+        if (selectedStage !== "all" && item.stage !== selectedStage) {
+          return false;
+        }
+        if (searchTerm) {
+          const haystack = `${item.event} ${item.source} ${item.attribute} ${item.category}`.toLowerCase();
+          if (!haystack.includes(searchTerm)) {
+            return false;
+          }
+        }
+        return true;
+      });
+
+    const renderEvents = () => {
+      const rows = getFilteredEvents().slice(0, 10);
+      if (!rows.length) {
+        dataFlowEventsList.innerHTML = `<li class="dataflow-empty">No live events in this view.</li>`;
+        return;
+      }
+
+      dataFlowEventsList.innerHTML = rows
+        .map(
+          (item) => `
+            <li class="dataflow-event-item ${escapeHtml(item.category)}">
+              <div class="dataflow-event-head">
+                <strong>${escapeHtml(item.source)}</strong>
+                <span>${escapeHtml(formatAge(item.ageSeconds))}</span>
+              </div>
+              <p>${escapeHtml(item.title)}</p>
+              <small>${escapeHtml(item.detail)}</small>
+              <div class="dataflow-event-foot">
+                <em class="${getStateClass(item.state)}">${escapeHtml(item.state)}</em>
+                <span>${escapeHtml(stageLabels[item.stage] ?? item.stage)}</span>
+              </div>
+            </li>
+          `
+        )
+        .join("");
+    };
+
+    const renderPager = (pageCount) => {
+      dataFlowPager.innerHTML = `
+        <button type="button" data-page="${Math.max(1, currentPage - 1)}">Prev</button>
+        ${Array.from({ length: pageCount }, (_, i) => i + 1)
+          .map((page) => `<button type="button" class="${page === currentPage ? "active" : ""}" data-page="${page}">${page}</button>`)
+          .join("")}
+        <button type="button" data-page="${Math.min(pageCount, currentPage + 1)}">Next</button>
+      `;
+    };
+
+    const renderFindingsTable = (rows) => {
+      if (!rows.length) {
+        dataFlowFindingsBody.innerHTML = `
+          <tr>
+            <td colspan="7">
+              <div class="empty-state">No findings match your current filters.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      dataFlowFindingsBody.innerHTML = rows
+        .map(
+          (item) => `
+            <tr>
+              <td>
+                <div class="dataflow-event-cell">
+                  <strong>${escapeHtml(item.event)}</strong>
+                  <p>${escapeHtml(stageLabels[item.stage] ?? item.stage)}</p>
+                </div>
+              </td>
+              <td>${escapeHtml(item.source)}</td>
+              <td>${escapeHtml(item.attribute)}</td>
+              <td>
+                <div class="similarity-cell">
+                  <div class="similarity-bar"><span style="width:${item.similarity}%"></span></div>
+                  <span>${item.similarity}%</span>
+                </div>
+              </td>
+              <td>${escapeHtml(formatAge(item.ageSeconds))}</td>
+              <td>
+                <select class="dataflow-state-select ${getStateClass(item.state)}" data-id="${item.id}">
+                  ${stateValues
+                    .map(
+                      (state) =>
+                        `<option value="${state}" ${item.state === state ? "selected" : ""}>${state}</option>`
+                    )
+                    .join("")}
+                </select>
+              </td>
+              <td>
+                <button type="button" class="dataflow-view-btn js-dataflow-view" data-id="${item.id}">View</button>
+              </td>
+            </tr>
+          `
+        )
+        .join("");
+    };
+
+    const updateSummaryCards = () => {
+      const processedLast5m = eventsData.filter((item) => item.ageSeconds <= 300).length;
+      const backlog = Math.max(0, eventsData.length - processedLast5m);
+
+      if (dfTotalEvents) {
+        dfTotalEvents.textContent = String(eventsData.length);
+      }
+      if (dfProcessed5m) {
+        dfProcessed5m.textContent = String(processedLast5m);
+      }
+      if (dfBacklogCount) {
+        dfBacklogCount.textContent = String(backlog);
+      }
+
+      const stageCounts = {
+        collectors: 18,
+        ingestion: 0,
+        normalization: 0,
+        enrichment: 0,
+        scoring: 0,
+        alerting: findingsData.filter((item) => item.state !== "Ignored").length
+      };
+
+      eventsData.forEach((item) => {
+        if (Object.prototype.hasOwnProperty.call(stageCounts, item.stage)) {
+          stageCounts[item.stage] += 1;
+        }
+      });
+
+      flowStageGrid.querySelectorAll("[data-stage-count]").forEach((node) => {
+        const stage = node.getAttribute("data-stage-count");
+        if (!stage || !Object.prototype.hasOwnProperty.call(stageCounts, stage)) {
+          return;
+        }
+        node.textContent = String(stageCounts[stage]);
+      });
+
+      if (dfMetricIngestion) {
+        dfMetricIngestion.textContent = String(stageCounts.ingestion);
+      }
+      if (dfMetricNormalization) {
+        dfMetricNormalization.textContent = String(stageCounts.normalization);
+      }
+      if (dfMetricEnrichment) {
+        dfMetricEnrichment.textContent = String(stageCounts.enrichment);
+      }
+      if (dfMetricScoring) {
+        dfMetricScoring.textContent = String(stageCounts.scoring);
+      }
+      if (dfMetricAlerting) {
+        dfMetricAlerting.textContent = String(stageCounts.alerting);
+      }
+      if (dfMetricLatency) {
+        const latency = 160 + (eventsData.length % 12) * 7;
+        dfMetricLatency.textContent = `${latency}ms`;
+      }
+      if (dfMetricTotalAlerts) {
+        dfMetricTotalAlerts.textContent = String(findingsData.length);
+      }
+    };
+
+    const updateIgnoredButton = () => {
+      if (!dataFlowMarkIgnoredBtn) {
+        return;
+      }
+      const unseenIgnored = findingsData.filter((item) => item.state === "Ignored" && !item.ignoredSeen).length;
+      dataFlowMarkIgnoredBtn.textContent =
+        unseenIgnored > 0 ? `Mark ${unseenIgnored} Ignored As Seen` : "Ignored Findings Reviewed";
+      dataFlowMarkIgnoredBtn.disabled = unseenIgnored === 0;
+    };
+
+    const render = () => {
+      const filteredFindings = getFilteredFindings();
+      const totalFiltered = filteredFindings.length;
+      const pageCount = Math.max(1, Math.ceil(totalFiltered / pageSize));
+      currentPage = Math.min(currentPage, pageCount);
+
+      const startIndex = (currentPage - 1) * pageSize;
+      const pageRows = filteredFindings.slice(startIndex, startIndex + pageSize);
+      const shownStart = totalFiltered ? startIndex + 1 : 0;
+      const shownEnd = totalFiltered ? startIndex + pageRows.length : 0;
+
+      renderFindingsTable(pageRows);
+      renderPager(pageCount);
+      renderEvents();
+      updateSummaryCards();
+      updateIgnoredButton();
+
+      if (dataFlowPagingInfo) {
+        dataFlowPagingInfo.textContent = `Showing: ${shownStart} to ${shownEnd} of ${totalFiltered}`;
+      }
+    };
+
+    flowStageGrid.querySelectorAll(".flow-stage-card[data-stage]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const stage = button.getAttribute("data-stage");
+        if (!stage) {
+          return;
+        }
+        selectedStage = stage;
+        flowStageGrid
+          .querySelectorAll(".flow-stage-card[data-stage]")
+          .forEach((item) => item.classList.toggle("active", item === button));
+        currentPage = 1;
+        render();
+      });
+    });
+
+    dataFlowEventFilter.querySelectorAll("button[data-filter]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = button.getAttribute("data-filter");
+        if (!filter) {
+          return;
+        }
+        selectedEventFilter = filter;
+        dataFlowEventFilter
+          .querySelectorAll("button[data-filter]")
+          .forEach((item) => item.classList.toggle("active", item === button));
+        renderEvents();
+      });
+    });
+
+    dataFlowTopSearch?.addEventListener("input", () => {
+      searchTerm = dataFlowTopSearch.value.trim().toLowerCase();
+      currentPage = 1;
+      render();
+    });
+
+    dataFlowStateFilter?.addEventListener("change", () => {
+      stateFilter = dataFlowStateFilter.value;
+      currentPage = 1;
+      render();
+    });
+
+    dataFlowFindingsBody.addEventListener("change", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLSelectElement) || !target.classList.contains("dataflow-state-select")) {
+        return;
+      }
+
+      const id = Number(target.getAttribute("data-id"));
+      const row = findingsData.find((item) => item.id === id);
+      if (!row) {
+        return;
+      }
+      row.state = stateValues.includes(target.value) ? target.value : row.state;
+      row.ignoredSeen = row.state !== "Ignored";
+      currentPage = 1;
+      render();
+    });
+
+    dataFlowFindingsBody.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+      const viewButton = target.closest(".js-dataflow-view");
+      if (!(viewButton instanceof HTMLButtonElement)) {
+        return;
+      }
+      const id = Number(viewButton.getAttribute("data-id"));
+      if (!Number.isInteger(id) || id <= 0) {
+        return;
+      }
+      redirect(`alert-details.html?id=${id}`);
+    });
+
+    dataFlowMarkIgnoredBtn?.addEventListener("click", () => {
+      findingsData.forEach((item) => {
+        if (item.state === "Ignored") {
+          item.ignoredSeen = true;
+        }
+      });
+      render();
+    });
+
+    dataFlowPager.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLButtonElement)) {
+        return;
+      }
+      const page = Number(target.getAttribute("data-page"));
+      if (!Number.isFinite(page) || page <= 0) {
+        return;
+      }
+      currentPage = page;
+      render();
+    });
+
+    dataFlowSideNav?.querySelectorAll("button[data-route]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const route = button.getAttribute("data-route");
+        if (route && route !== "data-flow.html") {
+          redirect(route);
+        }
+      });
+    });
+
+    dataFlowMobileMenuBtn?.addEventListener("click", () => {
+      dataFlowShell.classList.toggle("sidebar-open");
+    });
+
+    document.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Node)) {
+        return;
+      }
+      if (
+        window.innerWidth <= 1024 &&
+        dataFlowShell.classList.contains("sidebar-open") &&
+        !dataFlowSidebar?.contains(target) &&
+        !dataFlowMobileMenuBtn?.contains(target)
+      ) {
+        dataFlowShell.classList.remove("sidebar-open");
+      }
+    });
+
+    dataFlowOrgSwitcher?.addEventListener("click", () => {
+      const currentIndex = activeDomains.indexOf(dataFlowOrgLabel?.textContent ?? activeDomains[0]);
+      const nextIndex = (currentIndex + 1 + activeDomains.length) % activeDomains.length;
+      if (dataFlowOrgLabel) {
+        dataFlowOrgLabel.textContent = activeDomains[nextIndex];
+      }
+    });
+
+    if (dataFlowUserInitial) {
+      dataFlowUserInitial.textContent = getInitials(session.name);
+    }
+
+    window.setInterval(() => {
+      eventsData.forEach((item) => {
+        item.ageSeconds += 18;
+      });
+      findingsData.forEach((item) => {
+        item.ageSeconds += 18;
+      });
+
+      const seed = eventSeeds[liveEventCursor % eventSeeds.length];
+      const nextEventId = eventsData.length ? eventsData[0].id + 1 : 1;
+      const nextFindingId = findingsData.length ? findingsData[0].id + 1 : 1;
+      const similarity = Math.max(61, Math.min(97, 90 - ((liveEventCursor * 2) % 18)));
+
+      eventsData.unshift({
+        id: nextEventId,
+        category: seed.category,
+        source: seed.source,
+        title: seed.title,
+        detail: seed.detail,
+        stage: seed.stage,
+        state: seed.state,
+        ageSeconds: 12,
+        ignoredSeen: seed.state !== "Ignored"
+      });
+      if (eventsData.length > 24) {
+        eventsData.pop();
+      }
+
+      findingsData.unshift({
+        id: nextFindingId,
+        event: seed.title,
+        source: seed.source,
+        attribute: attributeByCategory[seed.category] ?? "Signal",
+        category: seed.category,
+        stage: seed.stage,
+        similarity,
+        ageSeconds: 12,
+        state: seed.state,
+        ignoredSeen: seed.state !== "Ignored"
+      });
+      if (findingsData.length > 56) {
+        findingsData.pop();
+      }
+
+      liveEventCursor += 1;
+      render();
+    }, 9000);
+
+    render();
+  };
+
   const initAlertDetailsPage = () => {
     const session = getSession();
     if (!session) {
@@ -2753,6 +3722,14 @@
     }
     if (document.body.dataset.page === "findings") {
       initFindingsPage();
+      return;
+    }
+    if (document.body.dataset.page === "settings") {
+      initSettingsPage();
+      return;
+    }
+    if (document.body.dataset.page === "data-flow") {
+      initDataFlowPage();
       return;
     }
     if (document.body.dataset.page === "alert-details") {

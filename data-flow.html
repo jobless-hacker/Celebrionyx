@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intelligence Dashboard | Data Flow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dashboard-page dataflow-page" data-page="data-flow">
+  <div class="dataflow-shell">
+    <aside class="dataflow-sidebar" id="dataFlowSidebar">
+      <header class="sidebar-brand">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M32 4L54 12v18c0 14-8 25-22 30C18 55 10 44 10 30V12L32 4z" fill="none" stroke="#9fd2ff" stroke-width="3"/>
+          <path d="M32 12v40M20 24h8M36 32h8M24 40h10" stroke="#e2f2ff" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h1>INTELLIGENCE</h1>
+          <p>DASHBOARD</p>
+        </div>
+      </header>
+
+      <nav class="dataflow-side-nav" id="dataFlowSideNav" aria-label="Data flow sidebar">
+        <button class="dataflow-nav-item" data-route="dashboard.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="13" y="3" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="3" y="13" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="13" y="13" width="8" height="8" rx="1.5" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="nav-label">Dashboard</span>
+        </button>
+
+        <button class="dataflow-nav-item" data-route="alerts.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3L2 20h20L12 3z" fill="currentColor"/>
+              <path d="M12 9v5M12 17v.2" stroke="#0a2254" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Alerts</span>
+        </button>
+
+        <button class="dataflow-nav-item active" data-route="data-flow.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 12h5l2-4 4 8 2-4h5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Data Flow</span>
+        </button>
+
+        <button class="dataflow-nav-item" data-route="organization.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="5" y="4" width="14" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Organization</span>
+        </button>
+
+        <button class="dataflow-nav-item" data-route="findings.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 16v-4M10 20V8M14 16V4M18 20v-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Findings</span>
+        </button>
+
+        <button class="dataflow-nav-item" data-route="settings.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 8.2A3.8 3.8 0 1112 16a3.8 3.8 0 010-7.8z" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M4 13.8v-3.6l2.1-.5c.2-.7.5-1.3.9-1.9L5.9 6.1l2.6-2.6 1.7 1.2c.6-.4 1.2-.7 1.9-.9L12.6 2h3.6l.5 2.1c.7.2 1.3.5 1.9.9l1.7-1.2 2.6 2.6-1.2 1.7c.4.6.7 1.2.9 1.9L24 10.2v3.6l-2.1.5c-.2.7-.5 1.3-.9 1.9l1.2 1.7-2.6 2.6-1.7-1.2c-.6.4-1.2.7-1.9.9l-.5 2.1h-3.6l-.5-2.1c-.7-.2-1.3-.5-1.9-.9l-1.7 1.2-2.6-2.6 1.2-1.7a8 8 0 01-.9-1.9L4 13.8z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+            </svg>
+          </span>
+          <span class="nav-label">Settings</span>
+        </button>
+
+        <button class="dataflow-nav-item" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3L4 7v6c0 5 3.3 8.5 8 10 4.7-1.5 8-5 8-10V7l-8-4z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </span>
+          <span class="nav-label">Admin</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="dataflow-main">
+      <header class="dataflow-topbar">
+        <div class="dataflow-title-wrap">
+          <button id="dataFlowMobileMenuBtn" class="mobile-nav-btn" type="button" aria-label="Open menu">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div>
+            <h2>Data Flow</h2>
+            <button id="dataFlowOrgSwitcher" class="org-switcher" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.6"/>
+              </svg>
+              <span id="dataFlowOrgLabel">acme-corp.com</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="dataflow-top-actions">
+          <label class="dataflow-search-top">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.9"/>
+              <path d="M20 20l-4.1-4.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+            <input id="dataFlowTopSearch" type="search" placeholder="Search">
+          </label>
+          <button class="circle-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3a5 5 0 00-5 5v2.7c0 .8-.2 1.6-.7 2.3L5 15h14l-1.3-2c-.5-.7-.7-1.5-.7-2.3V8a5 5 0 00-5-5z" fill="currentColor"/>
+            </svg>
+            <span class="notify-count">2</span>
+          </button>
+          <button id="dataFlowUserBtn" class="alerts-avatar-btn" type="button" aria-label="User menu">
+            <span id="dataFlowUserInitial">JD</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="dataflow-content">
+        <article class="dataflow-card">
+          <div class="dataflow-header-line">
+            <h3>Data Flow <span>Live Monitoring</span></h3>
+            <div class="dataflow-kpis">
+              <div class="dataflow-kpi">
+                <span>Total Events</span>
+                <strong id="dfTotalEvents">0</strong>
+              </div>
+              <div class="dataflow-kpi">
+                <span>Processed 5m</span>
+                <strong id="dfProcessed5m">0</strong>
+              </div>
+              <div class="dataflow-kpi">
+                <span>Queue</span>
+                <strong id="dfBacklogCount">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-stage-grid" id="flowStageGrid">
+            <button type="button" class="flow-stage-card active" data-stage="all">
+              <h4>Collectors</h4>
+              <p><span class="flow-stage-count" data-stage-count="collectors">18</span> workers</p>
+            </button>
+            <button type="button" class="flow-stage-card" data-stage="ingestion">
+              <h4>Ingestion</h4>
+              <p><span class="flow-stage-count" data-stage-count="ingestion">42</span> events</p>
+            </button>
+            <button type="button" class="flow-stage-card" data-stage="normalization">
+              <h4>Normalization</h4>
+              <p><span class="flow-stage-count" data-stage-count="normalization">14</span> events</p>
+            </button>
+            <button type="button" class="flow-stage-card" data-stage="enrichment">
+              <h4>Enrichment</h4>
+              <p><span class="flow-stage-count" data-stage-count="enrichment">12</span> events</p>
+            </button>
+            <button type="button" class="flow-stage-card" data-stage="scoring">
+              <h4>Scoring</h4>
+              <p><span class="flow-stage-count" data-stage-count="scoring">17</span> events</p>
+            </button>
+            <button type="button" class="flow-stage-card" data-stage="alerting">
+              <h4>Alerting</h4>
+              <p><span class="flow-stage-count" data-stage-count="alerting">102</span> alerts</p>
+            </button>
+          </div>
+
+          <div class="dataflow-main-grid">
+            <section class="dataflow-findings-panel">
+              <div class="dataflow-panel-head">
+                <h4>Latest Findings</h4>
+                <div class="dataflow-panel-tools">
+                  <select id="dataFlowStateFilter">
+                    <option value="all">All States</option>
+                    <option value="New">New</option>
+                    <option value="Updated">Updated</option>
+                    <option value="Ignored">Ignored</option>
+                  </select>
+                  <button id="dataFlowMarkIgnoredBtn" type="button">Mark Ignored As Seen</button>
+                </div>
+              </div>
+              <div class="dataflow-table-wrap">
+                <table class="dataflow-table">
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>Source</th>
+                      <th>Attribute</th>
+                      <th>Similarity</th>
+                      <th>Timestamp</th>
+                      <th>State</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dataFlowFindingsBody"></tbody>
+                </table>
+              </div>
+              <div class="dataflow-table-footer">
+                <p id="dataFlowPagingInfo">Showing: 1 to 6 of 0</p>
+                <div class="pager" id="dataFlowPager"></div>
+              </div>
+            </section>
+
+            <aside class="dataflow-events-panel">
+              <div class="dataflow-panel-head">
+                <h4>Live Ingestion Events</h4>
+              </div>
+              <div class="dataflow-event-filters" id="dataFlowEventFilter">
+                <button type="button" class="active" data-filter="all">All</button>
+                <button type="button" data-filter="leak">Leak</button>
+                <button type="button" data-filter="phishing">Phishing</button>
+                <button type="button" data-filter="domain">Domain</button>
+                <button type="button" data-filter="vulnerability">Vulnerability</button>
+              </div>
+              <ul id="dataFlowEventsList" class="dataflow-events-list"></ul>
+            </aside>
+          </div>
+
+          <div class="dataflow-metrics-strip">
+            <div class="dataflow-metric-box">
+              <span>Ingestion</span>
+              <strong id="dfMetricIngestion">0</strong>
+            </div>
+            <div class="dataflow-metric-box">
+              <span>Normalization</span>
+              <strong id="dfMetricNormalization">0</strong>
+            </div>
+            <div class="dataflow-metric-box">
+              <span>Enrichment</span>
+              <strong id="dfMetricEnrichment">0</strong>
+            </div>
+            <div class="dataflow-metric-box">
+              <span>Scoring</span>
+              <strong id="dfMetricScoring">0</strong>
+            </div>
+            <div class="dataflow-metric-box">
+              <span>Alerting</span>
+              <strong id="dfMetricAlerting">0</strong>
+            </div>
+            <div class="dataflow-metric-box">
+              <span>Latency</span>
+              <strong id="dfMetricLatency">0ms</strong>
+            </div>
+            <div class="dataflow-metric-box">
+              <span>Total Alerts</span>
+              <strong id="dfMetricTotalAlerts">0</strong>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
