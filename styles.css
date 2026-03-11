@@ -1144,6 +1144,16 @@ input[type="checkbox"] {
   white-space: nowrap;
 }
 
+.feed-item-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.dashboard-alert-link {
+  color: #eef6ff;
+}
+
 .source-card {
   grid-area: source;
 }
@@ -2026,6 +2036,10 @@ input[type="checkbox"] {
 
 .status-select.new {
   background: linear-gradient(180deg, rgba(65, 91, 134, 0.6), rgba(41, 64, 103, 0.64));
+}
+
+.status-select.resolved {
+  background: linear-gradient(180deg, rgba(80, 120, 93, 0.62), rgba(58, 95, 72, 0.66));
 }
 
 .table-actions {
@@ -3677,6 +3691,11 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
+.finding-action-btn.js-investigate-finding {
+  background: linear-gradient(180deg, rgba(61, 127, 199, 0.72), rgba(41, 95, 164, 0.7));
+  color: #eff8ff;
+}
+
 .finding-disposition-select {
   border: 1px solid rgba(149, 204, 255, 0.2);
   border-radius: 7px;
@@ -4132,6 +4151,18 @@ input[type="checkbox"] {
   font-size: 0.86rem;
   padding: 0.2rem 0.42rem;
   cursor: pointer;
+}
+
+.dataflow-row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  flex-wrap: wrap;
+}
+
+.dataflow-view-btn.js-dataflow-investigate {
+  background: linear-gradient(180deg, rgba(61, 127, 199, 0.72), rgba(41, 95, 164, 0.7));
+  color: #eff8ff;
 }
 
 .dataflow-table-footer {

@@ -1,6 +1,7 @@
 (() => {
   const SESSION_KEY = "intelDash.session";
   const REMEMBERED_EMAIL_KEY = "intelDash.rememberedEmail";
+  const INVESTIGATION_STORE_KEY = "intelDash.investigationStore.v1";
   const DEMO_ACCOUNTS = {
     "analyst@intelligence.local": {
       name: "SOC Analyst",
@@ -95,6 +96,325 @@
       return parts[0].slice(0, 2).toUpperCase();
     }
     return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  };
+
+  const INVESTIGATION_TEMPLATES = [
+    {
+      title: "Credential Leak Found on Dark Web",
+      severity: "critical",
+      category: "Credential Leak",
+      source: "Breach Forums",
+      confidence: 95,
+      status: "Investigating"
+    },
+    {
+      title: "Typosquatting Domain Detected",
+      severity: "critical",
+      category: "Phishing",
+      source: "Threat Exchange",
+      confidence: 90,
+      status: "Investigating"
+    },
+    {
+      title: "Acme Corp Credentials Exposed",
+      severity: "critical",
+      category: "Credential Leak",
+      source: "Pastebin",
+      confidence: 87,
+      status: "Investigating"
+    },
+    {
+      title: "Data Leak Mentioned on Dark Web",
+      severity: "high",
+      category: "Data Leak",
+      source: "Hidden Marketplace",
+      confidence: 85,
+      status: "New"
+    },
+    {
+      title: "Acme Exec Email Found in Data Dump",
+      severity: "high",
+      category: "Credential Leak",
+      source: "PasteSite",
+      confidence: 80,
+      status: "Investigating"
+    },
+    {
+      title: "Phishing Campaign Targeting Employees",
+      severity: "medium",
+      category: "Phishing",
+      source: "Darktrace",
+      confidence: 75,
+      status: "New"
+    },
+    {
+      title: "Acme RDP Server Found Vulnerable",
+      severity: "medium",
+      category: "Exposed Service",
+      source: "Shodan",
+      confidence: 70,
+      status: "New"
+    },
+    {
+      title: "Acme Database Info Exposed Online",
+      severity: "low",
+      category: "Database Leak",
+      source: "LeakBase",
+      confidence: 65,
+      status: "New"
+    },
+    {
+      title: "Employee List Shared on Pastebin",
+      severity: "low",
+      category: "Data Leak",
+      source: "Pastebin",
+      confidence: 60,
+      status: "New"
+    },
+    {
+      title: "Suspicious Login Burst from TOR",
+      severity: "high",
+      category: "Credential Leak",
+      source: "Threat Exchange",
+      confidence: 82,
+      status: "Investigating"
+    },
+    {
+      title: "Executive Wallet Mentioned in Forum",
+      severity: "medium",
+      category: "Data Leak",
+      source: "Surface Forum",
+      confidence: 73,
+      status: "New"
+    }
+  ];
+
+  const getInvestigationTemplate = (id) => {
+    const safeId = Number.isInteger(id) && id > 0 ? id : 1;
+    return INVESTIGATION_TEMPLATES[(safeId - 1) % INVESTIGATION_TEMPLATES.length];
+  };
+
+  const normalizeInvestigationStatus = (value) => {
+    if (value === "Investigating" || value === "Resolved") {
+      return value;
+    }
+    return "New";
+  };
+
+  const investigationStatusFromFindingState = (state) => {
+    if (state === "Ignored") {
+      return "Resolved";
+    }
+    if (state === "Updated") {
+      return "Investigating";
+    }
+    return "New";
+  };
+
+  const findingStateFromInvestigationStatus = (status) => {
+    if (status === "Resolved") {
+      return "Ignored";
+    }
+    if (status === "Investigating") {
+      return "Updated";
+    }
+    return "New";
+  };
+
+  const parseIsoDate = (value) => {
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return null;
+    }
+    return parsed;
+  };
+
+  const formatRelativeTime = (value) => {
+    const parsed = parseIsoDate(value);
+    if (!parsed) {
+      return "just now";
+    }
+    const diffMs = Date.now() - parsed.getTime();
+    if (diffMs < 45000) {
+      return "just now";
+    }
+    const minutes = Math.floor(diffMs / 60000);
+    if (minutes < 60) {
+      return `${minutes}m ago`;
+    }
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) {
+      return `${hours}h ago`;
+    }
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+  };
+
+  const cloneInvestigationRecord = (record) => ({
+    ...record,
+    history: Array.isArray(record.history) ? record.history.map((entry) => ({ ...entry })) : []
+  });
+
+  const loadInvestigationStore = () => {
+    const parsed = safeParse(localStorage.getItem(INVESTIGATION_STORE_KEY));
+    if (!parsed || typeof parsed !== "object" || !parsed.alerts || typeof parsed.alerts !== "object") {
+      return {
+        alerts: {}
+      };
+    }
+    return parsed;
+  };
+
+  const saveInvestigationStore = (store) => {
+    localStorage.setItem(INVESTIGATION_STORE_KEY, JSON.stringify(store));
+  };
+
+  const ensureInvestigationRecordInStore = (store, id, defaults = {}) => {
+    const safeId = Number.isInteger(id) && id > 0 ? id : 1;
+    const key = String(safeId);
+    const template = getInvestigationTemplate(safeId);
+    const base = {
+      id: safeId,
+      title: defaults.title ?? template.title,
+      severity: defaults.severity ?? template.severity,
+      category: defaults.category ?? template.category,
+      source: defaults.source ?? template.source,
+      confidence: Number(defaults.confidence ?? template.confidence),
+      status: normalizeInvestigationStatus(defaults.status ?? template.status),
+      updatedAt: new Date().toISOString(),
+      history: []
+    };
+
+    let changed = false;
+    let record = store.alerts[key];
+    if (!record || typeof record !== "object") {
+      record = base;
+      store.alerts[key] = record;
+      return {
+        record,
+        changed: true
+      };
+    }
+
+    if (!record.title) {
+      record.title = base.title;
+      changed = true;
+    }
+    if (!record.severity) {
+      record.severity = base.severity;
+      changed = true;
+    }
+    if (!record.category) {
+      record.category = base.category;
+      changed = true;
+    }
+    if (!record.source) {
+      record.source = base.source;
+      changed = true;
+    }
+    if (!Number.isFinite(Number(record.confidence))) {
+      record.confidence = base.confidence;
+      changed = true;
+    }
+    const normalizedStatus = normalizeInvestigationStatus(record.status);
+    if (record.status !== normalizedStatus) {
+      record.status = normalizedStatus;
+      changed = true;
+    }
+    if (!record.updatedAt || !parseIsoDate(record.updatedAt)) {
+      record.updatedAt = base.updatedAt;
+      changed = true;
+    }
+    if (!Array.isArray(record.history)) {
+      record.history = [];
+      changed = true;
+    } else if (record.history.length > 120) {
+      record.history = record.history.slice(0, 120);
+      changed = true;
+    }
+
+    return {
+      record,
+      changed
+    };
+  };
+
+  const getInvestigationRecord = (id, defaults = {}) => {
+    const store = loadInvestigationStore();
+    const { record, changed } = ensureInvestigationRecordInStore(store, id, defaults);
+    if (changed) {
+      saveInvestigationStore(store);
+    }
+    return cloneInvestigationRecord(record);
+  };
+
+  const getInvestigationRecords = (ids, defaultsById = {}) => {
+    const store = loadInvestigationStore();
+    let changed = false;
+    const records = ids.map((id) => {
+      const defaults = defaultsById[String(id)] ?? {};
+      const ensured = ensureInvestigationRecordInStore(store, id, defaults);
+      changed ||= ensured.changed;
+      return cloneInvestigationRecord(ensured.record);
+    });
+    if (changed) {
+      saveInvestigationStore(store);
+    }
+    return records;
+  };
+
+  const pushInvestigationHistory = (record, entry) => {
+    const nextEntry = {
+      type: entry.type ?? "note",
+      source: entry.source ?? "dashboard",
+      user: entry.user ?? "Analyst",
+      text: entry.text ?? "",
+      status: entry.status ? normalizeInvestigationStatus(entry.status) : null,
+      at: new Date().toISOString()
+    };
+    record.history.unshift(nextEntry);
+    if (record.history.length > 120) {
+      record.history = record.history.slice(0, 120);
+    }
+    record.updatedAt = nextEntry.at;
+  };
+
+  const setInvestigationStatus = (id, status, meta = {}, defaults = {}) => {
+    const store = loadInvestigationStore();
+    const { record } = ensureInvestigationRecordInStore(store, id, defaults);
+    const nextStatus = normalizeInvestigationStatus(status);
+    if (record.status !== nextStatus) {
+      record.status = nextStatus;
+      pushInvestigationHistory(record, {
+        type: "status",
+        source: meta.source ?? "alerts",
+        user: meta.user ?? "Analyst",
+        text: meta.text ?? `Status changed to ${nextStatus}.`,
+        status: nextStatus
+      });
+    } else {
+      record.updatedAt = new Date().toISOString();
+    }
+    saveInvestigationStore(store);
+    return cloneInvestigationRecord(record);
+  };
+
+  const addInvestigationComment = (id, comment, meta = {}, defaults = {}) => {
+    const text = String(comment ?? "").trim();
+    if (!text) {
+      return getInvestigationRecord(id, defaults);
+    }
+    const store = loadInvestigationStore();
+    const { record } = ensureInvestigationRecordInStore(store, id, defaults);
+    pushInvestigationHistory(record, {
+      type: "comment",
+      source: meta.source ?? "alert-details",
+      user: meta.user ?? "Analyst",
+      text,
+      status: record.status
+    });
+    saveInvestigationStore(store);
+    return cloneInvestigationRecord(record);
   };
 
   const initLoginPage = () => {
@@ -345,24 +665,28 @@
 
     const baseNewAlerts = [
       {
+        id: 1,
         severity: "critical",
         title: "Credential Leak",
         detail: "GRl8ins, acme-c0rp.exine.com",
         time: "5m ago"
       },
       {
+        id: 4,
         severity: "high",
         title: "Data Leak",
         detail: "acrter onmiscrnes, camoche@eain.com...",
         time: "13m ago"
       },
       {
+        id: 7,
         severity: "high",
         title: "Exposed Database",
         detail: "Phahs for intressissearch server",
         time: "35m ago"
       },
       {
+        id: 10,
         severity: "medium",
         title: "Data Leak",
         detail: "Internal documents for sale",
@@ -410,18 +734,21 @@
 
     const baseRecentAlerts = [
       {
+        id: 2,
         severity: "critical",
         title: "Typosquatted",
         detail: "Impersonatnng. Acme-c0rp.com",
         time: "2 minutes ago"
       },
       {
+        id: 3,
         severity: "critical",
         title: "Dark Web",
         detail: "Leaked email. password",
         time: "4 minutes ago"
       },
       {
+        id: 5,
         severity: "low",
         title: "Data Leak",
         detail: "Internal documents for sale.",
@@ -462,6 +789,18 @@
       return [...list.slice(safeOffset), ...list.slice(0, safeOffset)];
     };
 
+    const trackedAlertIds = Array.from({ length: 33 }, (_, index) => index + 1);
+
+    const getSharedAlertStats = () => {
+      const records = getInvestigationRecords(trackedAlertIds);
+      const unresolved = records.filter((record) => record.status !== "Resolved").length;
+      const investigating = records.filter((record) => record.status === "Investigating").length;
+      return {
+        unresolved,
+        investigating
+      };
+    };
+
     const renderNewAlerts = (items) => {
       newAlertsList.innerHTML = items
         .map(
@@ -474,10 +813,23 @@
                 ${escapeHtml(item.severity[0].toUpperCase() + item.severity.slice(1))}
               </span>
               <div>
-                <p class="entry-title">${escapeHtml(item.title)}</p>
+                <p class="entry-title">
+                  ${
+                    item.id
+                      ? `<a class="table-title-link dashboard-alert-link" href="alert-details.html?id=${item.id}">${escapeHtml(item.title)}</a>`
+                      : escapeHtml(item.title)
+                  }
+                </p>
                 <p class="entry-sub">${escapeHtml(item.detail)}</p>
               </div>
-              <span class="entry-time">${escapeHtml(item.time)}</span>
+              <div class="feed-item-actions">
+                <span class="entry-time">${escapeHtml(item.time)}</span>
+                ${
+                  item.id
+                    ? `<button type="button" class="small-link-btn js-dashboard-investigate" data-id="${item.id}">Investigate</button>`
+                    : ""
+                }
+              </div>
             </li>
           `
         )
@@ -515,7 +867,13 @@
                 ${escapeHtml(item.severity[0].toUpperCase() + item.severity.slice(1))}
               </span>
               <div>
-                <p class="entry-title">${escapeHtml(item.title)}</p>
+                <p class="entry-title">
+                  ${
+                    item.id
+                      ? `<a class="table-title-link dashboard-alert-link" href="alert-details.html?id=${item.id}">${escapeHtml(item.title)}</a>`
+                      : escapeHtml(item.title)
+                  }
+                </p>
                 <p class="entry-sub">${escapeHtml(item.detail)}</p>
               </div>
               <span class="entry-time">${escapeHtml(item.time)}</span>
@@ -535,12 +893,13 @@
     };
 
     const updateNotificationCounters = (profile) => {
-      const count = Math.max(1, Math.min(9, Math.round(profile.activeAlerts / 4)));
+      const sharedStats = getSharedAlertStats();
+      const count = Math.max(1, Math.min(9, Math.round(sharedStats.investigating / 3)));
       if (notifyCount) {
         notifyCount.textContent = String(count);
       }
       if (alertBadge) {
-        alertBadge.textContent = String(profile.activeAlerts);
+        alertBadge.textContent = String(sharedStats.unresolved);
       }
     };
 
@@ -559,7 +918,8 @@
         affectedAssets.textContent = String(profile.affectedAssets);
       }
       if (activeAlertsCount) {
-        activeAlertsCount.textContent = String(profile.activeAlerts);
+        const sharedStats = getSharedAlertStats();
+        activeAlertsCount.textContent = String(sharedStats.unresolved);
       }
       if (activeMentionsCount) {
         activeMentionsCount.textContent = String(profile.mentions);
@@ -822,6 +1182,27 @@
     refreshAlertsBtn?.addEventListener("click", cycleAlerts);
     refreshRecentBtn?.addEventListener("click", cycleRecentAlerts);
 
+    newAlertsList.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+      const button = target.closest(".js-dashboard-investigate");
+      if (!(button instanceof HTMLButtonElement)) {
+        return;
+      }
+      const id = Number(button.getAttribute("data-id"));
+      if (!Number.isInteger(id) || id <= 0) {
+        return;
+      }
+      setInvestigationStatus(id, "Investigating", {
+        source: "dashboard",
+        user: session.name,
+        text: "Escalated to investigation from dashboard feed."
+      });
+      redirect(`alert-details.html?id=${id}`);
+    });
+
     renderNewAlerts(baseNewAlerts);
     renderFindings(baseFindings);
     renderRecentAlerts(baseRecentAlerts);
@@ -931,6 +1312,18 @@
         date: relativeDates[index % relativeDates.length],
         status
       };
+    });
+
+    alertsData.forEach((item) => {
+      const record = getInvestigationRecord(item.id, {
+        title: item.title,
+        severity: item.severity,
+        category: item.category,
+        source: item.source,
+        confidence: item.confidence,
+        status: item.status
+      });
+      item.status = record.status;
     });
 
     const chartSeries = {
@@ -1108,10 +1501,12 @@
                 <select class="status-select ${item.status.toLowerCase()}" data-id="${item.id}">
                   <option value="Investigating" ${item.status === "Investigating" ? "selected" : ""}>Investigating</option>
                   <option value="New" ${item.status === "New" ? "selected" : ""}>New</option>
+                  <option value="Resolved" ${item.status === "Resolved" ? "selected" : ""}>Resolved</option>
                 </select>
               </td>
               <td>
                 <div class="table-actions">
+                  <button type="button" class="table-action-btn js-investigate-alert" data-id="${item.id}" title="Investigate">&#9881;</button>
                   <button type="button" class="table-action-btn js-view-alert" data-id="${item.id}" title="View">&#128269;</button>
                   <button type="button" class="table-action-btn" title="More">&#9679;</button>
                 </div>
@@ -1160,7 +1555,23 @@
       if (!row) {
         return;
       }
-      row.status = target.value === "Investigating" ? "Investigating" : "New";
+      const updated = setInvestigationStatus(
+        row.id,
+        target.value,
+        {
+          source: "alerts",
+          user: session.name,
+          text: `Status changed to ${target.value} from Alerts page.`
+        },
+        {
+          title: row.title,
+          severity: row.severity,
+          category: row.category,
+          source: row.source,
+          confidence: row.confidence
+        }
+      );
+      row.status = updated.status;
       currentPage = 1;
       render();
     });
@@ -1168,6 +1579,34 @@
     alertsTableBody.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof Element)) {
+        return;
+      }
+      const investigateButton = target.closest(".js-investigate-alert");
+      if (investigateButton instanceof HTMLButtonElement) {
+        const id = Number(investigateButton.getAttribute("data-id"));
+        const row = alertsData.find((item) => item.id === id);
+        if (!row) {
+          return;
+        }
+        const updated = setInvestigationStatus(
+          row.id,
+          "Investigating",
+          {
+            source: "alerts",
+            user: session.name,
+            text: "Escalated to investigation from Alerts list."
+          },
+          {
+            title: row.title,
+            severity: row.severity,
+            category: row.category,
+            source: row.source,
+            confidence: row.confidence
+          }
+        );
+        row.status = updated.status;
+        currentPage = 1;
+        render();
         return;
       }
       const viewButton = target.closest(".js-view-alert");
@@ -1502,6 +1941,25 @@
       };
     });
 
+    findingsData.forEach((item) => {
+      const record = getInvestigationRecord(item.id, {
+        title: item.title,
+        category: item.attribute,
+        source: item.source,
+        confidence: item.similarity,
+        status: investigationStatusFromFindingState(item.state)
+      });
+      item.state = findingStateFromInvestigationStatus(record.status);
+      if (record.status === "Investigating") {
+        item.disposition = "Investigating";
+      } else if (record.status === "Resolved") {
+        item.disposition = "Accepted";
+      } else if (item.disposition === "Investigating") {
+        item.disposition = "New";
+      }
+      item.ignoredSeen = item.state !== "Ignored";
+    });
+
     let activeCategory = "all";
     let stateFilter = "all";
     let searchTerm = "";
@@ -1634,6 +2092,7 @@
               </td>
               <td>
                 <div class="finding-actions">
+                  <button type="button" class="finding-action-btn js-investigate-finding" data-id="${item.id}">Investigate</button>
                   <button type="button" class="finding-action-btn js-open-alert-details" data-id="${item.id}">View</button>
                   <select class="finding-disposition-select" data-id="${item.id}">
                     ${dispositionValues
@@ -1753,18 +2212,120 @@
         } else {
           row.ignoredSeen = true;
         }
+        if (row.state === "Updated") {
+          row.disposition = "Investigating";
+        }
+        if (row.state === "Ignored" && row.disposition === "New") {
+          row.disposition = "Accepted";
+        }
+        setInvestigationStatus(
+          row.id,
+          investigationStatusFromFindingState(row.state),
+          {
+            source: "findings",
+            user: session.name,
+            text: `Finding state changed to ${row.state}.`
+          },
+          {
+            title: row.title,
+            category: row.attribute,
+            source: row.source,
+            confidence: row.similarity
+          }
+        );
         currentPage = 1;
         render();
       }
 
       if (target.classList.contains("finding-disposition-select")) {
         row.disposition = dispositionValues.includes(target.value) ? target.value : row.disposition;
+        if (row.disposition === "Investigating") {
+          row.state = "Updated";
+          setInvestigationStatus(
+            row.id,
+            "Investigating",
+            {
+              source: "findings",
+              user: session.name,
+              text: "Marked as investigating from Findings actions."
+            },
+            {
+              title: row.title,
+              category: row.attribute,
+              source: row.source,
+              confidence: row.similarity
+            }
+          );
+          currentPage = 1;
+          render();
+        } else if (row.disposition === "Accepted" && row.state === "Ignored") {
+          setInvestigationStatus(
+            row.id,
+            "Resolved",
+            {
+              source: "findings",
+              user: session.name,
+              text: "Finding accepted and marked resolved."
+            },
+            {
+              title: row.title,
+              category: row.attribute,
+              source: row.source,
+              confidence: row.similarity
+            }
+          );
+        } else if (row.disposition === "New" && row.state !== "Ignored") {
+          setInvestigationStatus(
+            row.id,
+            "New",
+            {
+              source: "findings",
+              user: session.name,
+              text: "Disposition reset to New."
+            },
+            {
+              title: row.title,
+              category: row.attribute,
+              source: row.source,
+              confidence: row.similarity
+            }
+          );
+        }
       }
     });
 
     findingsTableBody.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof Element)) {
+        return;
+      }
+      const investigateButton = target.closest(".js-investigate-finding");
+      if (investigateButton instanceof HTMLButtonElement) {
+        const id = Number(investigateButton.getAttribute("data-id"));
+        const row = findingsData.find((item) => item.id === id);
+        if (!row) {
+          return;
+        }
+        row.state = "Updated";
+        row.disposition = "Investigating";
+        row.ignoredSeen = true;
+        setInvestigationStatus(
+          row.id,
+          "Investigating",
+          {
+            source: "findings",
+            user: session.name,
+            text: "Escalated to investigation from Findings list."
+          },
+          {
+            title: row.title,
+            category: row.attribute,
+            source: row.source,
+            confidence: row.similarity
+          }
+        );
+        currentPage = 1;
+        render();
         return;
       }
       const openButton = target.closest(".js-open-alert-details");
@@ -2392,6 +2953,18 @@
       };
     });
 
+    findingsData.forEach((item) => {
+      const record = getInvestigationRecord(item.id, {
+        title: item.event,
+        category: item.attribute,
+        source: item.source,
+        confidence: item.similarity,
+        status: investigationStatusFromFindingState(item.state)
+      });
+      item.state = findingStateFromInvestigationStatus(record.status);
+      item.ignoredSeen = item.state !== "Ignored";
+    });
+
     const formatAge = (seconds) => {
       const safe = Math.max(0, Math.round(seconds));
       if (safe < 60) {
@@ -2521,7 +3094,10 @@
                 </select>
               </td>
               <td>
-                <button type="button" class="dataflow-view-btn js-dataflow-view" data-id="${item.id}">View</button>
+                <div class="dataflow-row-actions">
+                  <button type="button" class="dataflow-view-btn js-dataflow-investigate" data-id="${item.id}">Investigate</button>
+                  <button type="button" class="dataflow-view-btn js-dataflow-view" data-id="${item.id}">View</button>
+                </div>
               </td>
             </tr>
           `
@@ -2676,6 +3252,21 @@
       }
       row.state = stateValues.includes(target.value) ? target.value : row.state;
       row.ignoredSeen = row.state !== "Ignored";
+      setInvestigationStatus(
+        row.id,
+        investigationStatusFromFindingState(row.state),
+        {
+          source: "data-flow",
+          user: session.name,
+          text: `Data Flow state changed to ${row.state}.`
+        },
+        {
+          title: row.event,
+          category: row.attribute,
+          source: row.source,
+          confidence: row.similarity
+        }
+      );
       currentPage = 1;
       render();
     });
@@ -2683,6 +3274,34 @@
     dataFlowFindingsBody.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof Element)) {
+        return;
+      }
+      const investigateButton = target.closest(".js-dataflow-investigate");
+      if (investigateButton instanceof HTMLButtonElement) {
+        const id = Number(investigateButton.getAttribute("data-id"));
+        const row = findingsData.find((item) => item.id === id);
+        if (!row) {
+          return;
+        }
+        row.state = "Updated";
+        row.ignoredSeen = true;
+        setInvestigationStatus(
+          row.id,
+          "Investigating",
+          {
+            source: "data-flow",
+            user: session.name,
+            text: "Escalated to investigation from Data Flow findings."
+          },
+          {
+            title: row.event,
+            category: row.attribute,
+            source: row.source,
+            confidence: row.similarity
+          }
+        );
+        currentPage = 1;
+        render();
         return;
       }
       const viewButton = target.closest(".js-dataflow-view");
@@ -2798,6 +3417,15 @@
         state: seed.state,
         ignoredSeen: seed.state !== "Ignored"
       });
+      const persistedRecord = getInvestigationRecord(nextFindingId, {
+        title: seed.title,
+        category: attributeByCategory[seed.category] ?? "Signal",
+        source: seed.source,
+        confidence: similarity,
+        status: investigationStatusFromFindingState(seed.state)
+      });
+      findingsData[0].state = findingStateFromInvestigationStatus(persistedRecord.status);
+      findingsData[0].ignoredSeen = findingsData[0].state !== "Ignored";
       if (findingsData.length > 56) {
         findingsData.pop();
       }
@@ -3012,12 +3640,6 @@
       Resolved: "Resolved"
     };
 
-    const nowTime = () =>
-      new Date().toLocaleTimeString([], {
-        hour: "numeric",
-        minute: "2-digit"
-      });
-
     const toIsoDate = (value) =>
       String(value)
         .toLowerCase()
@@ -3110,6 +3732,50 @@
     let selectedRange = "7d";
     let searchTerm = "";
     const detail = buildDetail(alertId);
+    const defaultStatusHistory = detail.statusHistory.map((entry) => ({ ...entry }));
+    const defaultAuditLog = detail.auditLog.map((entry) => ({ ...entry }));
+
+    const syncDetailFromStore = () => {
+      const persisted = getInvestigationRecord(alertId, {
+        title: detail.title,
+        severity: detail.severity,
+        category: detail.category,
+        source: detail.source,
+        confidence: detail.confidence,
+        status: detail.status
+      });
+
+      detail.title = persisted.title;
+      detail.severity = persisted.severity;
+      detail.category = persisted.category;
+      detail.source = persisted.source;
+      detail.confidence = Number(persisted.confidence);
+      detail.status = persisted.status;
+
+      const persistedStatusHistory = persisted.history
+        .map((entry) => ({
+          user: entry.user ?? "Analyst",
+          text: entry.text ?? "",
+          time: formatRelativeTime(entry.at)
+        }))
+        .filter((entry) => entry.text)
+        .slice(0, 6);
+
+      const persistedAuditLog = persisted.history
+        .map((entry) => ({
+          user: entry.user ?? "Analyst",
+          action: entry.text ?? "Record updated.",
+          source: detail.source,
+          time: formatRelativeTime(entry.at)
+        }))
+        .filter((entry) => entry.action)
+        .slice(0, 6);
+
+      detail.statusHistory = [...persistedStatusHistory, ...defaultStatusHistory].slice(0, 8);
+      detail.auditLog = [...persistedAuditLog, ...defaultAuditLog].slice(0, 8);
+    };
+
+    syncDetailFromStore();
 
     const renderTagList = (target, items, className) => {
       if (!target) {
@@ -3293,22 +3959,24 @@
     });
 
     detailStatusSelect?.addEventListener("change", () => {
-      detail.status = detailStatusSelect.value;
-      detail.statusHistory.unshift({
-        user: session.name,
-        text: `Status updated to ${detail.status}.`,
-        time: "just now"
-      });
-      detail.auditLog.unshift({
-        user: session.name,
-        action: `Status changed to ${detail.status}`,
-        source: detail.source,
-        time: nowTime()
-      });
-      detail.statusHistory = detail.statusHistory.slice(0, 8);
-      detail.auditLog = detail.auditLog.slice(0, 8);
-      renderStatusHistory();
-      renderAuditLog();
+      setInvestigationStatus(
+        alertId,
+        detailStatusSelect.value,
+        {
+          source: "alert-details",
+          user: session.name,
+          text: `Status updated to ${detailStatusSelect.value}.`
+        },
+        {
+          title: detail.title,
+          severity: detail.severity,
+          category: detail.category,
+          source: detail.source,
+          confidence: detail.confidence
+        }
+      );
+      syncDetailFromStore();
+      render();
     });
 
     detailCommentForm?.addEventListener("submit", (event) => {
@@ -3318,24 +3986,27 @@
         return;
       }
 
-      detail.statusHistory.unshift({
-        user: session.name,
-        text: comment,
-        time: "just now"
-      });
-      detail.auditLog.unshift({
-        user: session.name,
-        action: `Comment added: ${comment}`,
-        source: detail.source,
-        time: nowTime()
-      });
-      detail.statusHistory = detail.statusHistory.slice(0, 8);
-      detail.auditLog = detail.auditLog.slice(0, 8);
+      addInvestigationComment(
+        alertId,
+        comment,
+        {
+          source: "alert-details",
+          user: session.name
+        },
+        {
+          title: detail.title,
+          severity: detail.severity,
+          category: detail.category,
+          source: detail.source,
+          confidence: detail.confidence
+        }
+      );
 
       if (detailCommentInput) {
         detailCommentInput.value = "";
       }
 
+      syncDetailFromStore();
       renderStatusHistory();
       renderAuditLog();
     });
@@ -3542,6 +4213,11 @@
       geoRegions: (index) => `Geo${index}`
     };
 
+    const trackedAlertIds = Array.from({ length: 33 }, (_, index) => index + 1);
+
+    const getInvestigatingCount = () =>
+      getInvestigationRecords(trackedAlertIds).filter((record) => record.status === "Investigating").length;
+
     let profileIndex = 0;
 
     const renderList = (target, items, key) => {
@@ -3607,7 +4283,8 @@
         orgSuspiciousCount.textContent = String(profile.suspiciousCount);
       }
       if (orgSuspiciousMeta) {
-        orgSuspiciousMeta.textContent = profile.suspiciousMeta;
+        const investigatingCount = getInvestigatingCount();
+        orgSuspiciousMeta.textContent = `${investigatingCount} investigating`;
       }
       if (orgVulnerabilitiesCount) {
         orgVulnerabilitiesCount.textContent = String(profile.vulnerabilitiesCount);
