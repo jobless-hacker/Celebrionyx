@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intelligence Dashboard | Alerts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dashboard-page alerts-page" data-page="alerts">
+  <div class="alerts-shell">
+    <aside class="alerts-sidebar" id="alertsSidebar">
+      <header class="sidebar-brand">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M32 4L54 12v18c0 14-8 25-22 30C18 55 10 44 10 30V12L32 4z" fill="none" stroke="#9fd2ff" stroke-width="3"/>
+          <path d="M32 12v40M20 24h8M36 32h8M24 40h10" stroke="#e2f2ff" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h1>INTELLIGENCE</h1>
+          <p>DASHBOARD</p>
+        </div>
+      </header>
+
+      <nav class="alerts-side-nav" id="alertsSideNav" aria-label="Alerts sidebar">
+        <button class="alerts-nav-item" data-route="dashboard.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="13" y="3" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="3" y="13" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="13" y="13" width="8" height="8" rx="1.5" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="nav-label">Dashboard</span>
+        </button>
+
+        <button class="alerts-nav-item active" data-route="alerts.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3L2 20h20L12 3z" fill="currentColor"/>
+              <path d="M12 9v5M12 17v.2" stroke="#0a2254" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Alerts</span>
+        </button>
+
+        <button class="alerts-nav-item" data-route="organization.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="5" y="4" width="14" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Organization</span>
+        </button>
+
+        <button class="alerts-nav-item" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 16v-4M10 20V8M14 16V4M18 20v-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Findings</span>
+        </button>
+
+        <button class="alerts-nav-item" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 12h5l2-4 4 8 2-4h5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Live Data Flow</span>
+        </button>
+
+        <button class="alerts-nav-item" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 8.2A3.8 3.8 0 1112 16a3.8 3.8 0 010-7.8z" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M4 13.8v-3.6l2.1-.5c.2-.7.5-1.3.9-1.9L5.9 6.1l2.6-2.6 1.7 1.2c.6-.4 1.2-.7 1.9-.9L12.6 2h3.6l.5 2.1c.7.2 1.3.5 1.9.9l1.7-1.2 2.6 2.6-1.2 1.7c.4.6.7 1.2.9 1.9L24 10.2v3.6l-2.1.5c-.2.7-.5 1.3-.9 1.9l1.2 1.7-2.6 2.6-1.7-1.2c-.6.4-1.2.7-1.9.9l-.5 2.1h-3.6l-.5-2.1c-.7-.2-1.3-.5-1.9-.9l-1.7 1.2-2.6-2.6 1.2-1.7a8 8 0 01-.9-1.9L4 13.8z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+            </svg>
+          </span>
+          <span class="nav-label">Settings</span>
+        </button>
+
+        <button class="alerts-nav-item" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3L4 7v6c0 5 3.3 8.5 8 10 4.7-1.5 8-5 8-10V7l-8-4z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </span>
+          <span class="nav-label">Admin</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="alerts-main">
+      <header class="alerts-topbar">
+        <div class="alerts-title-wrap">
+          <button id="alertsMobileMenuBtn" class="mobile-nav-btn" type="button" aria-label="Open menu">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <h2>Alerts</h2>
+        </div>
+        <div class="alerts-top-actions">
+          <label class="alerts-search-top">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.9"/>
+              <path d="M20 20l-4.1-4.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+            <input id="alertsTopSearch" type="search" placeholder="">
+          </label>
+          <button class="circle-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3a5 5 0 00-5 5v2.7c0 .8-.2 1.6-.7 2.3L5 15h14l-1.3-2c-.5-.7-.7-1.5-.7-2.3V8a5 5 0 00-5-5z" fill="currentColor"/>
+            </svg>
+            <span class="notify-count">2</span>
+          </button>
+          <button id="alertsUserBtn" class="alerts-avatar-btn" type="button" aria-label="User menu">
+            <span id="alertsUserInitial">JD</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="alerts-content">
+        <article class="alerts-card">
+          <div class="alerts-card-head">
+            <div class="severity-strip" id="severityStrip">
+              <button class="sev-pill critical active" type="button" data-level="critical">
+                <span class="sev-label">Critical</span><span id="sevCriticalCount">8</span>
+              </button>
+              <button class="sev-pill high active" type="button" data-level="high">
+                <span class="sev-label">High</span><span id="sevHighCount">21</span>
+              </button>
+              <button class="sev-pill medium active" type="button" data-level="medium">
+                <span class="sev-label">Medium</span><span id="sevMediumCount">9</span>
+              </button>
+              <button class="sev-pill low active" type="button" data-level="low">
+                <span class="sev-label">Low</span><span id="sevLowCount">12</span>
+              </button>
+            </div>
+
+            <div class="range-switch" id="alertsRangeSwitch">
+              <button type="button" data-range="24h">24h</button>
+              <button type="button" class="active" data-range="7d">7d</button>
+              <button type="button" data-range="30d">30d</button>
+            </div>
+          </div>
+
+          <div class="totals-row">
+            <div class="totals-card">
+              <p>Total <span>Alerts</span></p>
+              <strong id="alertsTotalCount">50</strong>
+            </div>
+
+            <div class="filter-row">
+              <select id="alertsCategoryFilter">
+                <option value="all">All Categories</option>
+                <option value="Credential Leak">Credential Leak</option>
+                <option value="Phishing">Phishing</option>
+                <option value="Data Leak">Data Leak</option>
+                <option value="Exposed Service">Exposed Service</option>
+                <option value="Database Leak">Database Leak</option>
+              </select>
+              <select id="alertsSourceFilter">
+                <option value="all">All Sources</option>
+              </select>
+              <select id="alertsStatusFilter">
+                <option value="all">All Levels</option>
+                <option value="Investigating">Investigating</option>
+                <option value="New">New</option>
+              </select>
+            </div>
+
+            <label class="alerts-search-inline">
+              <input id="alertsSearch" type="search" placeholder="Search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.9"/>
+                <path d="M20 20l-4.1-4.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+              </svg>
+            </label>
+          </div>
+
+          <div class="alerts-mid">
+            <div class="mid-left">
+              <div class="banner-row">
+                <div class="banner-pill">Critical Alerts</div>
+                <div class="banner-investigation">Under Investigation <strong id="underInvestigationCount">4</strong></div>
+              </div>
+              <div class="range-chip-row">
+                <span class="range-chip" id="rangeChipText">7 - 10 Alerts</span>
+              </div>
+            </div>
+            <div class="mid-chart">
+              <div class="mini-chart-head">
+                <h3>Daily Alerts</h3>
+              </div>
+              <svg id="alertsLineChart" viewBox="0 0 340 130" role="img" aria-label="Daily alerts line chart">
+                <g id="alertsChartGrid"></g>
+                <polyline id="alertsChartLine"></polyline>
+                <g id="alertsChartPoints"></g>
+                <g id="alertsChartLabels"></g>
+              </svg>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="alerts-table">
+              <thead>
+                <tr>
+                  <th>Severity</th>
+                  <th>Category</th>
+                  <th>Source</th>
+                  <th>Confidence</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="alertsTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <p id="alertsPagingInfo">Showing: 1 to 10 of 33</p>
+            <div class="pager" id="alertsPager"></div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
