@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intelligence Dashboard | Findings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dashboard-page findings-page" data-page="findings">
+  <div class="findings-shell">
+    <aside class="findings-sidebar" id="findingsSidebar">
+      <header class="sidebar-brand">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M32 4L54 12v18c0 14-8 25-22 30C18 55 10 44 10 30V12L32 4z" fill="none" stroke="#9fd2ff" stroke-width="3"/>
+          <path d="M32 12v40M20 24h8M36 32h8M24 40h10" stroke="#e2f2ff" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h1>INTELLIGENCE</h1>
+          <p>DASHBOARD</p>
+        </div>
+      </header>
+
+      <nav class="findings-side-nav" id="findingsSideNav" aria-label="Findings sidebar">
+        <button class="findings-nav-item" data-route="dashboard.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="13" y="3" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="3" y="13" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <rect x="13" y="13" width="8" height="8" rx="1.5" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="nav-label">Dashboard</span>
+        </button>
+
+        <button class="findings-nav-item" data-route="alerts.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3L2 20h20L12 3z" fill="currentColor"/>
+              <path d="M12 9v5M12 17v.2" stroke="#0a2254" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Alerts</span>
+        </button>
+
+        <button class="findings-nav-item active" data-route="findings.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 16v-4M10 20V8M14 16V4M18 20v-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Findings</span>
+        </button>
+
+        <button class="findings-nav-item" data-route="organization.html" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="5" y="4" width="14" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Organization</span>
+        </button>
+
+        <button class="findings-nav-item" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 12h5l2-4 4 8 2-4h5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="nav-label">Live Data Flow</span>
+        </button>
+
+        <button class="findings-nav-item" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 8.2A3.8 3.8 0 1112 16a3.8 3.8 0 010-7.8z" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M4 13.8v-3.6l2.1-.5c.2-.7.5-1.3.9-1.9L5.9 6.1l2.6-2.6 1.7 1.2c.6-.4 1.2-.7 1.9-.9L12.6 2h3.6l.5 2.1c.7.2 1.3.5 1.9.9l1.7-1.2 2.6 2.6-1.2 1.7c.4.6.7 1.2.9 1.9L24 10.2v3.6l-2.1.5c-.2.7-.5 1.3-.9 1.9l1.2 1.7-2.6 2.6-1.7-1.2c-.6.4-1.2.7-1.9.9l-.5 2.1h-3.6l-.5-2.1c-.7-.2-1.3-.5-1.9-.9l-1.7 1.2-2.6-2.6 1.2-1.7a8 8 0 01-.9-1.9L4 13.8z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+            </svg>
+          </span>
+          <span class="nav-label">Settings</span>
+        </button>
+
+        <button class="findings-nav-item" type="button">
+          <span class="side-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3L4 7v6c0 5 3.3 8.5 8 10 4.7-1.5 8-5 8-10V7l-8-4z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </span>
+          <span class="nav-label">Admin</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="findings-main">
+      <header class="findings-topbar">
+        <div class="findings-title-wrap">
+          <button id="findingsMobileMenuBtn" class="mobile-nav-btn" type="button" aria-label="Open menu">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div>
+            <h2>Findings</h2>
+            <button id="findingsOrgSwitcher" class="org-switcher" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.6"/>
+              </svg>
+              <span id="findingsOrgLabel">acme-corp.com</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="findings-top-actions">
+          <label class="findings-search-top">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.9"/>
+              <path d="M20 20l-4.1-4.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+            <input id="findingsTopSearch" type="search" placeholder="Search">
+          </label>
+          <button class="circle-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3a5 5 0 00-5 5v2.7c0 .8-.2 1.6-.7 2.3L5 15h14l-1.3-2c-.5-.7-.7-1.5-.7-2.3V8a5 5 0 00-5-5z" fill="currentColor"/>
+            </svg>
+            <span class="notify-count">2</span>
+          </button>
+          <button id="findingsUserBtn" class="alerts-avatar-btn" type="button" aria-label="User menu">
+            <span id="findingsUserInitial">JD</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="findings-content">
+        <article class="findings-card">
+          <div class="findings-tabs" id="findingsTabs">
+            <button type="button" class="active" data-category="all">All Sources</button>
+            <button type="button" data-category="surface">Surface Web</button>
+            <button type="button" data-category="leak">Leak Source</button>
+            <button type="button" data-category="domain">Domain Monitoring</button>
+            <button type="button" data-category="document">Document Mention</button>
+            <button type="button" data-category="brand">Brand Abuse</button>
+            <button type="button" data-category="vulnerability">Vulnerability Mention</button>
+          </div>
+
+          <div class="findings-toolbar">
+            <div class="findings-headline">
+              <h3>Latest Findings</h3>
+              <p><span id="findingsTotalCount">0</span> Findings</p>
+            </div>
+            <div class="findings-tools">
+              <select id="findingsStateFilter">
+                <option value="all">All States</option>
+                <option value="New">New</option>
+                <option value="Updated">Updated</option>
+                <option value="Duplicate">Duplicate</option>
+                <option value="Ignored">Ignored</option>
+              </select>
+              <button id="markIgnoredSeenBtn" type="button">Mark Ignored As Seen</button>
+            </div>
+          </div>
+
+          <div class="findings-chip-row" id="findingsChipRow">
+            <button type="button" class="findings-chip active" data-chip="surface">Surface Web <span id="chipSurfaceCount">0</span></button>
+            <button type="button" class="findings-chip active" data-chip="leak">Leak Source <span id="chipLeakCount">0</span></button>
+            <button type="button" class="findings-chip active" data-chip="domain">Domain Monitoring <span id="chipDomainCount">0</span></button>
+            <button type="button" class="findings-chip active" data-chip="document">Document Mention <span id="chipDocumentCount">0</span></button>
+            <button type="button" class="findings-chip active" data-chip="brand">Brand Abuse <span id="chipBrandCount">0</span></button>
+            <button type="button" class="findings-chip active" data-chip="vulnerability">Vulnerability Mention <span id="chipVulnerabilityCount">0</span></button>
+          </div>
+
+          <div class="findings-table-wrap">
+            <table class="findings-table">
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Source</th>
+                  <th>Attribute</th>
+                  <th>Similarity</th>
+                  <th>Timestamp</th>
+                  <th>State</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="findingsTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="findings-table-footer">
+            <p id="findingsPagingInfo">Showing: 1 to 8 of 0</p>
+            <div class="pager" id="findingsPager"></div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

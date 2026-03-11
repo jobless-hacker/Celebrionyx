@@ -728,6 +728,10 @@
           redirect("alerts.html");
           return;
         }
+        if (view === "findings") {
+          redirect("findings.html");
+          return;
+        }
         sidebarNav.querySelectorAll(".side-nav-item").forEach((item) => item.classList.remove("active"));
         button.classList.add("active");
         if (sectionRibbonTitle) {
@@ -1290,6 +1294,549 @@
       alertsUserInitial.textContent = getInitials(session.name);
     }
 
+    render();
+  };
+
+  const initFindingsPage = () => {
+    const session = getSession();
+    if (!session) {
+      redirect("index.html");
+      return;
+    }
+
+    const findingsShell = document.querySelector(".findings-shell");
+    const findingsSidebar = $("findingsSidebar");
+    const findingsMobileMenuBtn = $("findingsMobileMenuBtn");
+    const findingsSideNav = $("findingsSideNav");
+    const findingsOrgSwitcher = $("findingsOrgSwitcher");
+    const findingsOrgLabel = $("findingsOrgLabel");
+    const findingsTopSearch = $("findingsTopSearch");
+    const findingsUserInitial = $("findingsUserInitial");
+
+    const findingsTabs = $("findingsTabs");
+    const findingsStateFilter = $("findingsStateFilter");
+    const findingsTotalCount = $("findingsTotalCount");
+    const findingsChipRow = $("findingsChipRow");
+    const markIgnoredSeenBtn = $("markIgnoredSeenBtn");
+    const findingsTableBody = $("findingsTableBody");
+    const findingsPagingInfo = $("findingsPagingInfo");
+    const findingsPager = $("findingsPager");
+
+    const chipSurfaceCount = $("chipSurfaceCount");
+    const chipLeakCount = $("chipLeakCount");
+    const chipDomainCount = $("chipDomainCount");
+    const chipDocumentCount = $("chipDocumentCount");
+    const chipBrandCount = $("chipBrandCount");
+    const chipVulnerabilityCount = $("chipVulnerabilityCount");
+
+    if (
+      !findingsShell ||
+      !findingsTableBody ||
+      !findingsPager ||
+      !findingsPagingInfo ||
+      !findingsTabs ||
+      !findingsChipRow
+    ) {
+      return;
+    }
+
+    const seedFindings = [
+      {
+        title: "Email:Password Pairs Exposed on Dark Web",
+        detail: "Acme accounts listed in a fresh leak bundle.",
+        category: "leak",
+        source: "Leak Site",
+        sourceDetail: "Breach Forums",
+        attribute: "Credential Leak",
+        attributeDetail: "@acme-corp.com",
+        similarity: 95
+      },
+      {
+        title: "Internal Acme Document Shared on Pastebin",
+        detail: "Policy draft observed in public paste source.",
+        category: "document",
+        source: "PasteSite",
+        sourceDetail: "Surface Archive",
+        attribute: "Document Mention",
+        attributeDetail: "acme-corp.com",
+        similarity: 93
+      },
+      {
+        title: "New Typosquatting Domain Detected",
+        detail: "Possible phishing domain mirrors employee login.",
+        category: "domain",
+        source: "Domain Monitor",
+        sourceDetail: "Registrar Feed",
+        attribute: "Brand Abuse",
+        attributeDetail: "acme-c0rp.com",
+        similarity: 87
+      },
+      {
+        title: "ACME Zero-Day Vulnerability Discussed",
+        detail: "Exploit reference posted in security forum thread.",
+        category: "vulnerability",
+        source: "Surface Web",
+        sourceDetail: "Security Forum",
+        attribute: "Vulnerability Mention",
+        attributeDetail: "CVE watchlist",
+        similarity: 82
+      },
+      {
+        title: "ACME Employee List Shared on Dark Web",
+        detail: "Directory-style dump references internal roles.",
+        category: "leak",
+        source: "Dark Web",
+        sourceDetail: "Breach Forums",
+        attribute: "Data Leak",
+        attributeDetail: "employee roster",
+        similarity: 80
+      },
+      {
+        title: "Stolen Acme Data Offered for Sale",
+        detail: "Actor advertising compressed corporate archive.",
+        category: "surface",
+        source: "Marketplace",
+        sourceDetail: "Hidden Marketplace",
+        attribute: "Leak Source",
+        attributeDetail: "dataset listing",
+        similarity: 78
+      },
+      {
+        title: "Potential Data Leak Mentioned on Telegram",
+        detail: "Threat actor claims access to finance documents.",
+        category: "brand",
+        source: "OpSec Channel",
+        sourceDetail: "Telegram",
+        attribute: "Brand Mention",
+        attributeDetail: "acmesecure",
+        similarity: 78
+      },
+      {
+        title: "Sensitive AWS Keys Published to Gist",
+        detail: "Repository mirror exposed credential-like secrets.",
+        category: "surface",
+        source: "Code Paste",
+        sourceDetail: "Public gist mirror",
+        attribute: "Cloud Exposure",
+        attributeDetail: "@acme-security.com",
+        similarity: 72
+      },
+      {
+        title: "Executive Name Targeted in Spoofed Campaign",
+        detail: "Campaign template impersonates CFO signature.",
+        category: "brand",
+        source: "Mail Telemetry",
+        sourceDetail: "Inbound Gateway",
+        attribute: "Impersonation",
+        attributeDetail: "Sarah Johnson",
+        similarity: 85
+      },
+      {
+        title: "Third-Party Vendor Mentioned in Breach Thread",
+        detail: "Vendor stack tied to potential chain compromise.",
+        category: "document",
+        source: "Surface Web",
+        sourceDetail: "Threat thread",
+        attribute: "Supply Chain",
+        attributeDetail: "acme-payments",
+        similarity: 74
+      }
+    ];
+
+    const relativeTimes = [
+      "5m ago",
+      "1h ago",
+      "2h ago",
+      "3h ago",
+      "6h ago",
+      "7h ago",
+      "8h ago",
+      "10h ago",
+      "1d ago",
+      "2d ago"
+    ];
+
+    const categoryLabel = {
+      all: "All Sources",
+      surface: "Surface Web",
+      leak: "Leak Source",
+      domain: "Domain Monitoring",
+      document: "Document Mention",
+      brand: "Brand Abuse",
+      vulnerability: "Vulnerability Mention"
+    };
+
+    const stateValues = ["New", "Updated", "Duplicate", "Ignored"];
+    const dispositionValues = ["New", "Accepted", "Escalated", "Investigating"];
+    const activeChips = new Set(["surface", "leak", "domain", "document", "brand", "vulnerability"]);
+
+    const findingsData = Array.from({ length: 42 }, (_, index) => {
+      const seed = seedFindings[index % seedFindings.length];
+      const similarityShift = ((index * 2) % 9) - 4;
+      const similarity = Math.max(56, Math.min(98, seed.similarity + similarityShift));
+      const state = stateValues[(index + 1) % stateValues.length];
+      const disposition = state === "Ignored" ? "Accepted" : dispositionValues[index % dispositionValues.length];
+
+      return {
+        id: index + 1,
+        title: seed.title,
+        detail: seed.detail,
+        category: seed.category,
+        source: seed.source,
+        sourceDetail: seed.sourceDetail,
+        attribute: seed.attribute,
+        attributeDetail: seed.attributeDetail,
+        similarity,
+        timestamp: relativeTimes[index % relativeTimes.length],
+        state,
+        disposition,
+        ignoredSeen: state !== "Ignored" ? true : index % 2 === 0
+      };
+    });
+
+    let activeCategory = "all";
+    let stateFilter = "all";
+    let searchTerm = "";
+    let currentPage = 1;
+    const pageSize = 8;
+
+    const getStateClass = (state) => String(state).toLowerCase().replaceAll(" ", "-");
+
+    const getFilteredFindings = () =>
+      findingsData.filter((item) => {
+        if (activeCategory !== "all" && item.category !== activeCategory) {
+          return false;
+        }
+        if (!activeChips.has(item.category)) {
+          return false;
+        }
+        if (stateFilter !== "all" && item.state !== stateFilter) {
+          return false;
+        }
+        if (searchTerm) {
+          const haystack =
+            `${item.title} ${item.detail} ${item.source} ${item.sourceDetail} ` +
+            `${item.attribute} ${item.attributeDetail} ${item.timestamp} ${item.state}`.toLowerCase();
+          if (!haystack.includes(searchTerm)) {
+            return false;
+          }
+        }
+        return true;
+      });
+
+    const renderChipCounts = () => {
+      const counts = {
+        surface: 0,
+        leak: 0,
+        domain: 0,
+        document: 0,
+        brand: 0,
+        vulnerability: 0
+      };
+
+      findingsData.forEach((item) => {
+        if (Object.prototype.hasOwnProperty.call(counts, item.category)) {
+          counts[item.category] += 1;
+        }
+      });
+
+      if (chipSurfaceCount) {
+        chipSurfaceCount.textContent = String(counts.surface);
+      }
+      if (chipLeakCount) {
+        chipLeakCount.textContent = String(counts.leak);
+      }
+      if (chipDomainCount) {
+        chipDomainCount.textContent = String(counts.domain);
+      }
+      if (chipDocumentCount) {
+        chipDocumentCount.textContent = String(counts.document);
+      }
+      if (chipBrandCount) {
+        chipBrandCount.textContent = String(counts.brand);
+      }
+      if (chipVulnerabilityCount) {
+        chipVulnerabilityCount.textContent = String(counts.vulnerability);
+      }
+    };
+
+    const renderPager = (pageCount) => {
+      findingsPager.innerHTML = `
+        <button type="button" data-page="${Math.max(1, currentPage - 1)}">Prev</button>
+        ${Array.from({ length: pageCount }, (_, i) => i + 1)
+          .map((page) => `<button type="button" class="${page === currentPage ? "active" : ""}" data-page="${page}">${page}</button>`)
+          .join("")}
+        <button type="button" data-page="${Math.min(pageCount, currentPage + 1)}">Next</button>
+      `;
+    };
+
+    const renderTable = (rows) => {
+      if (!rows.length) {
+        findingsTableBody.innerHTML = `
+          <tr>
+            <td colspan="7">
+              <div class="empty-state">No findings match your current filters.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      findingsTableBody.innerHTML = rows
+        .map(
+          (item) => `
+            <tr>
+              <td>
+                <div class="finding-event">
+                  <span class="finding-icon ${escapeHtml(item.category)}">&#9679;</span>
+                  <div class="finding-text">
+                    <strong>${escapeHtml(item.title)}</strong>
+                    <p>${escapeHtml(item.detail)}</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="finding-meta">
+                  <strong>${escapeHtml(item.source)}</strong>
+                  <p>${escapeHtml(item.sourceDetail)}</p>
+                </div>
+              </td>
+              <td>
+                <div class="finding-meta">
+                  <strong>${escapeHtml(item.attribute)}</strong>
+                  <p>${escapeHtml(item.attributeDetail)}</p>
+                </div>
+              </td>
+              <td>
+                <div class="similarity-cell">
+                  <div class="similarity-bar"><span style="width:${item.similarity}%"></span></div>
+                  <span>${item.similarity}%</span>
+                </div>
+              </td>
+              <td>${escapeHtml(item.timestamp)}</td>
+              <td>
+                <select class="finding-state-select ${getStateClass(item.state)}" data-id="${item.id}">
+                  ${stateValues
+                    .map(
+                      (state) =>
+                        `<option value="${state}" ${item.state === state ? "selected" : ""}>${state}</option>`
+                    )
+                    .join("")}
+                </select>
+              </td>
+              <td>
+                <div class="finding-actions">
+                  <button type="button" class="finding-action-btn js-open-alert-details" data-id="${item.id}">View</button>
+                  <select class="finding-disposition-select" data-id="${item.id}">
+                    ${dispositionValues
+                      .map(
+                        (value) =>
+                          `<option value="${value}" ${item.disposition === value ? "selected" : ""}>${value}</option>`
+                      )
+                      .join("")}
+                  </select>
+                </div>
+              </td>
+            </tr>
+          `
+        )
+        .join("");
+    };
+
+    const updateIgnoredButton = () => {
+      const unseenIgnoredCount = findingsData.filter((item) => item.state === "Ignored" && !item.ignoredSeen).length;
+      if (!markIgnoredSeenBtn) {
+        return;
+      }
+      markIgnoredSeenBtn.textContent =
+        unseenIgnoredCount > 0 ? `Mark ${unseenIgnoredCount} Ignored As Seen` : "Ignored Findings Reviewed";
+      markIgnoredSeenBtn.disabled = unseenIgnoredCount === 0;
+    };
+
+    const render = () => {
+      const filtered = getFilteredFindings();
+      const totalFiltered = filtered.length;
+      const pageCount = Math.max(1, Math.ceil(totalFiltered / pageSize));
+      currentPage = Math.min(currentPage, pageCount);
+
+      const startIndex = (currentPage - 1) * pageSize;
+      const pageRows = filtered.slice(startIndex, startIndex + pageSize);
+      const shownStart = totalFiltered ? startIndex + 1 : 0;
+      const shownEnd = totalFiltered ? startIndex + pageRows.length : 0;
+
+      renderTable(pageRows);
+      renderPager(pageCount);
+      updateIgnoredButton();
+
+      if (findingsPagingInfo) {
+        findingsPagingInfo.textContent = `Showing: ${shownStart} to ${shownEnd} of ${totalFiltered}`;
+      }
+      if (findingsTotalCount) {
+        findingsTotalCount.textContent = String(totalFiltered);
+      }
+    };
+
+    findingsTabs.querySelectorAll("button[data-category]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextCategory = button.getAttribute("data-category");
+        if (!nextCategory || !categoryLabel[nextCategory]) {
+          return;
+        }
+        activeCategory = nextCategory;
+        findingsTabs
+          .querySelectorAll("button[data-category]")
+          .forEach((item) => item.classList.toggle("active", item === button));
+        currentPage = 1;
+        render();
+      });
+    });
+
+    findingsChipRow.querySelectorAll("button[data-chip]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const chip = button.getAttribute("data-chip");
+        if (!chip || !activeChips.has(chip) && activeChips.size === 0) {
+          return;
+        }
+
+        if (activeChips.has(chip)) {
+          if (activeChips.size === 1) {
+            return;
+          }
+          activeChips.delete(chip);
+          button.classList.remove("active");
+        } else {
+          activeChips.add(chip);
+          button.classList.add("active");
+        }
+
+        currentPage = 1;
+        render();
+      });
+    });
+
+    findingsTopSearch?.addEventListener("input", () => {
+      searchTerm = findingsTopSearch.value.trim().toLowerCase();
+      currentPage = 1;
+      render();
+    });
+
+    findingsStateFilter?.addEventListener("change", () => {
+      stateFilter = findingsStateFilter.value;
+      currentPage = 1;
+      render();
+    });
+
+    findingsTableBody.addEventListener("change", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLSelectElement)) {
+        return;
+      }
+
+      const id = Number(target.getAttribute("data-id"));
+      const row = findingsData.find((item) => item.id === id);
+      if (!row) {
+        return;
+      }
+
+      if (target.classList.contains("finding-state-select")) {
+        row.state = stateValues.includes(target.value) ? target.value : row.state;
+        if (row.state === "Ignored") {
+          row.ignoredSeen = false;
+        } else {
+          row.ignoredSeen = true;
+        }
+        currentPage = 1;
+        render();
+      }
+
+      if (target.classList.contains("finding-disposition-select")) {
+        row.disposition = dispositionValues.includes(target.value) ? target.value : row.disposition;
+      }
+    });
+
+    findingsTableBody.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+      const openButton = target.closest(".js-open-alert-details");
+      if (!(openButton instanceof HTMLButtonElement)) {
+        return;
+      }
+      const id = Number(openButton.getAttribute("data-id"));
+      if (!Number.isInteger(id) || id <= 0) {
+        return;
+      }
+      redirect(`alert-details.html?id=${id}`);
+    });
+
+    markIgnoredSeenBtn?.addEventListener("click", () => {
+      findingsData.forEach((item) => {
+        if (item.state === "Ignored") {
+          item.ignoredSeen = true;
+          if (item.disposition === "New") {
+            item.disposition = "Accepted";
+          }
+        }
+      });
+      render();
+    });
+
+    findingsPager.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLButtonElement)) {
+        return;
+      }
+      const page = Number(target.getAttribute("data-page"));
+      if (!Number.isFinite(page) || page <= 0) {
+        return;
+      }
+      currentPage = page;
+      render();
+    });
+
+    findingsSideNav?.querySelectorAll("button[data-route]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const route = button.getAttribute("data-route");
+        if (route && route !== "findings.html") {
+          redirect(route);
+        }
+      });
+    });
+
+    findingsMobileMenuBtn?.addEventListener("click", () => {
+      findingsShell.classList.toggle("sidebar-open");
+    });
+
+    document.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Node)) {
+        return;
+      }
+      if (
+        window.innerWidth <= 1024 &&
+        findingsShell.classList.contains("sidebar-open") &&
+        !findingsSidebar?.contains(target) &&
+        !findingsMobileMenuBtn?.contains(target)
+      ) {
+        findingsShell.classList.remove("sidebar-open");
+      }
+    });
+
+    findingsOrgSwitcher?.addEventListener("click", () => {
+      const domains = ["acme-corp.com", "northstar-finance.io", "orbital-grid.net"];
+      const currentIndex = domains.indexOf(findingsOrgLabel?.textContent ?? domains[0]);
+      const nextIndex = (currentIndex + 1 + domains.length) % domains.length;
+      if (findingsOrgLabel) {
+        findingsOrgLabel.textContent = domains[nextIndex];
+      }
+    });
+
+    if (findingsUserInitial) {
+      findingsUserInitial.textContent = getInitials(session.name);
+    }
+
+    renderChipCounts();
     render();
   };
 
@@ -2202,6 +2749,10 @@
     }
     if (document.body.dataset.page === "alerts") {
       initAlertsPage();
+      return;
+    }
+    if (document.body.dataset.page === "findings") {
+      initFindingsPage();
       return;
     }
     if (document.body.dataset.page === "alert-details") {
