@@ -1,0 +1,162 @@
+.login-page .login-form .field,
+.login-page .login-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.login-page .login-form .field label,
+.login-page .login-form .form-group label {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  font-size: 1.95rem;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+  color: #d5e9ff;
+}
+
+.login-page .login-form .input-wrap,
+.login-page .login-form .input-field {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  border-radius: 11px;
+  border: 1px solid rgba(145, 198, 255, 0.45);
+  background: linear-gradient(180deg, rgba(16, 46, 103, 0.78), rgba(20, 58, 122, 0.75));
+  box-shadow:
+    0 8px 16px rgba(3, 11, 33, 0.35),
+    inset 0 1px 0 rgba(196, 225, 255, 0.13);
+  padding: 0.48rem 0.55rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.login-page .login-form .input-wrap:focus-within,
+.login-page .login-form .input-field:focus-within {
+  border-color: #8fd1ff;
+  box-shadow:
+    0 0 0 2px rgba(74, 159, 255, 0.28),
+    0 8px 16px rgba(3, 11, 33, 0.38);
+  transform: translateY(-1px);
+}
+
+.login-page .login-form .input-wrap.invalid,
+.login-page .login-form .input-field.invalid {
+  border-color: rgba(255, 106, 118, 0.95);
+  box-shadow:
+    0 0 0 2px rgba(255, 106, 118, 0.22),
+    inset 0 1px 0 rgba(255, 220, 223, 0.17);
+}
+
+.login-page .login-form .field-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: #b5d8ff;
+  flex: 0 0 auto;
+}
+
+.login-page .login-form .field-icon svg,
+.login-page .login-form .icon-button svg,
+.login-page .login-form .password-toggle svg {
+  width: 23px;
+  height: 23px;
+}
+
+.login-page .login-form input[type="email"],
+.login-page .login-form input[type="password"],
+.login-page .login-form input[type="text"] {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: var(--text-main);
+  font: inherit;
+  font-size: 1.32rem;
+  background: transparent;
+  padding: 0.45rem 0;
+}
+
+.login-page .login-form input::placeholder {
+  color: rgba(189, 214, 247, 0.86);
+}
+
+.login-page .login-form .icon-button,
+.login-page .login-form .password-toggle {
+  border: 0;
+  background: transparent;
+  color: #c8e4ff;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  transition: background-color 170ms ease, color 170ms ease;
+}
+
+.login-page .login-form .icon-button:hover,
+.login-page .login-form .icon-button:focus-visible,
+.login-page .login-form .password-toggle:hover,
+.login-page .login-form .password-toggle:focus-visible {
+  background: rgba(112, 173, 255, 0.2);
+  color: #fff;
+  outline: 0;
+}
+
+.login-page .login-options,
+.login-page .form-options {
+  margin-top: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.login-page .remember,
+.login-page .remember-me {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-soft);
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.login-page .remember input[type="checkbox"],
+.login-page .remember-me input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--brand);
+}
+
+.login-page .form-options a,
+.login-page .support a,
+.login-page .forgot-password {
+  color: #8dc8ff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 1.2rem;
+}
+
+.login-page .form-options a:hover,
+.login-page .support a:hover,
+.login-page .forgot-password:hover {
+  color: #dff1ff;
+}
+
+.login-page .form-message {
+  min-height: 1.25rem;
+  margin: 0.65rem 0;
+  font-size: 0.92rem;
+  color: var(--text-soft);
+}
+
+.login-page .form-message.error {
+  color: var(--danger);
+}
+
+.login-page .form-message.success {
+  color: var(--ok);
+}
+
+.login-page .form-message.info {
+  color: #8dc6ff;
+}

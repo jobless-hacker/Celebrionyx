@@ -1,0 +1,35 @@
+.table-title-link {
+  color: #e8f4ff;
+  font-size: 1.01rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.table-title-link:hover,
+.table-title-link:focus-visible {
+  color: #9fd8ff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pager button {
+  border: 1px solid rgba(148, 203, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(20, 55, 110, 0.42);
+  color: #cfe6ff;
+  font: inherit;
+  cursor: pointer;
+  min-width: 28px;
+  padding: 0.25rem 0.4rem;
+}
+
+.pager button.active {
+  background: rgba(78, 143, 235, 0.42);
+  color: #f2f8ff;
+}

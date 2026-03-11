@@ -1,0 +1,177 @@
+.login-page {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.2rem;
+  overflow: hidden;
+  background:
+    radial-gradient(80rem 38rem at 12% 12%, #114087 0%, transparent 55%),
+    radial-gradient(58rem 30rem at 85% 62%, #1b4d9b 0%, transparent 58%),
+    linear-gradient(135deg, var(--bg-0), var(--bg-1) 48%, var(--bg-2));
+}
+
+.login-page::before,
+.login-page::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+}
+
+.login-page::before {
+  background-image:
+    linear-gradient(to right, transparent 0 40%, rgba(109, 179, 255, 0.18) 50%, transparent 60% 100%),
+    repeating-linear-gradient(to right, rgba(141, 200, 255, 0.08) 0 2px, transparent 2px 50px),
+    repeating-linear-gradient(to bottom, rgba(141, 200, 255, 0.08) 0 2px, transparent 2px 50px);
+  mix-blend-mode: screen;
+  transform: rotate(-5deg);
+}
+
+.login-page::after {
+  background:
+    radial-gradient(circle at 25% 40%, rgba(121, 186, 255, 0.26), transparent 10%),
+    radial-gradient(circle at 55% 60%, rgba(121, 186, 255, 0.2), transparent 9%),
+    radial-gradient(circle at 73% 42%, rgba(121, 186, 255, 0.24), transparent 8%);
+  animation: login-pulse 8s ease-in-out infinite;
+}
+
+.login-page .auth-shell,
+.login-page .login-container {
+  position: relative;
+  width: min(900px, 94vw);
+  border-radius: 24px;
+  border: 1px solid rgba(166, 215, 255, 0.25);
+  background:
+    linear-gradient(120deg, var(--card-0), var(--card-1) 52%, rgba(39, 113, 214, 0.7)),
+    linear-gradient(180deg, rgba(164, 211, 255, 0.1), transparent 40%);
+  box-shadow:
+    0 24px 62px rgba(3, 8, 24, 0.75),
+    inset 0 1px 0 rgba(189, 225, 255, 0.27);
+  overflow: hidden;
+  animation: login-rise 700ms ease-out;
+}
+
+.login-page .brand-header,
+.login-page .login-brand {
+  padding: 2.2rem 3rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.login-page .brand-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.login-page .shield-icon,
+.login-page .login-logo {
+  width: 66px;
+  height: 66px;
+  filter: drop-shadow(0 6px 14px rgba(0, 10, 28, 0.6));
+}
+
+.login-page .brand-copy h1,
+.login-page .brand-copy p,
+.login-page .login-title,
+.login-page .login-tagline {
+  margin: 0;
+  line-height: 1;
+  font-family: "Rajdhani", sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.login-page .brand-copy h1,
+.login-page .login-title {
+  font-size: clamp(1.7rem, 2.7vw, 2.45rem);
+  font-weight: 700;
+}
+
+.login-page .brand-copy p,
+.login-page .login-tagline {
+  margin-top: 0.15rem;
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  color: #d0e7ff;
+  font-weight: 500;
+}
+
+.login-page .shell-subhead {
+  padding: 0.95rem 3rem;
+  border-top: 1px solid rgba(189, 225, 255, 0.07);
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(90deg, rgba(9, 32, 78, 0.7), rgba(62, 136, 235, 0.4));
+}
+
+.login-page .shell-subhead p {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.8vw, 1.65rem);
+  color: var(--text-soft);
+}
+
+.login-page .form-panel,
+.login-page .login-card {
+  width: min(470px, 100%);
+  padding: 2rem 3rem 2.6rem;
+}
+
+.login-page .form-panel h2 {
+  margin: 0 0 1rem;
+  font-family: "Rajdhani", sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 0.02em;
+}
+
+.login-page .support,
+.login-page .login-support {
+  margin: 1.45rem 0 0.35rem;
+  text-align: center;
+  color: var(--text-soft);
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.login-page .hint {
+  margin: 0.65rem 0 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+@keyframes login-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes login-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-page .brand-header,
+  .login-page .shell-subhead,
+  .login-page .form-panel {
+    padding-left: 1.15rem;
+    padding-right: 1.15rem;
+  }
+
+  .login-page .form-options {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .login-page .support,
+  .login-page .hint {
+    text-align: left;
+  }
+}

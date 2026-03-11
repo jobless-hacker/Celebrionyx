@@ -1,0 +1,15 @@
+:root {
+  --bg-0: #020c27;
+  --bg-1: #041943;
+  --bg-2: #0a2f77;
+  --card-0: rgba(7, 21, 54, 0.9);
+  --card-1: rgba(18, 53, 117, 0.9);
+  --line: rgba(124, 186, 255, 0.35);
+  --text-main: #eff6ff;
+  --text-soft: #bdd6f7;
+  --text-muted: #94b0d4;
+  --brand: #4ea0ff;
+  --brand-2: #2385ff;
+  --danger: #ff6a76;
+  --ok: #57e09a;
+}

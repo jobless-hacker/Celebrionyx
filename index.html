@@ -10,10 +10,10 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="login-page" data-page="login">
-  <main class="auth-shell">
-    <header class="brand-header">
+  <main class="auth-shell login-container">
+    <header class="brand-header login-brand">
       <div class="brand-row">
-        <svg class="shield-icon" viewBox="0 0 64 64" aria-hidden="true">
+        <svg class="shield-icon login-logo" viewBox="0 0 64 64" aria-hidden="true">
           <defs>
             <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#d9ecff"/>
@@ -26,8 +26,8 @@
           <circle cx="42" cy="32" r="2.4" fill="#dff2ff"/>
         </svg>
         <div class="brand-copy">
-          <h1>INTELLIGENCE</h1>
-          <p>DASHBOARD</p>
+          <h1 class="login-title">INTELLIGENCE</h1>
+          <p class="login-tagline">DASHBOARD</p>
         </div>
       </div>
     </header>
@@ -36,34 +36,34 @@
       <p>Real-Time Threat Monitoring &amp; Alerts</p>
     </div>
 
-    <section class="form-panel">
+    <section class="form-panel login-card">
       <h2>Sign In</h2>
 
-      <form id="loginForm" novalidate>
-        <div class="field">
+      <form id="loginForm" class="login-form" novalidate>
+        <div class="field form-group">
           <label for="email">Email</label>
-          <div class="input-wrap" id="emailWrap">
+          <div class="input-wrap input-field" id="emailWrap">
             <span class="field-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24">
                 <path d="M3 6h18v12H3z" fill="none" stroke="currentColor" stroke-width="1.8"/>
                 <path d="M4 7l8 7 8-7" fill="none" stroke="currentColor" stroke-width="1.8"/>
               </svg>
             </span>
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="Enter your email" required>
+            <input id="email" class="input-field-control" name="email" type="email" autocomplete="email" placeholder="Enter your email" required>
           </div>
         </div>
 
-        <div class="field">
+        <div class="field form-group">
           <label for="password">Password</label>
-          <div class="input-wrap" id="passwordWrap">
+          <div class="input-wrap input-field" id="passwordWrap">
             <span class="field-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24">
                 <path d="M6 11h12v9H6z" fill="none" stroke="currentColor" stroke-width="1.8"/>
                 <path d="M8.5 11V8.7A3.5 3.5 0 0112 5.2a3.5 3.5 0 013.5 3.5V11" fill="none" stroke="currentColor" stroke-width="1.8"/>
               </svg>
             </span>
-            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
-            <button id="togglePassword" type="button" class="icon-button" aria-label="Show password">
+            <input id="password" class="input-field-control" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+            <button id="togglePassword" type="button" class="icon-button password-toggle" aria-label="Show password">
               <svg viewBox="0 0 24 24">
                 <path d="M2 12s3.8-6 10-6 10 6 10 6-3.8 6-10 6-10-6-10-6z" fill="none" stroke="currentColor" stroke-width="1.8"/>
                 <circle cx="12" cy="12" r="2.8" fill="currentColor"/>
@@ -72,20 +72,20 @@
           </div>
         </div>
 
-        <div class="form-options">
-          <label class="remember">
+        <div class="form-options login-options">
+          <label class="remember remember-me">
             <input id="rememberMe" type="checkbox" name="rememberMe">
             <span>Remember me</span>
           </label>
-          <a href="#" id="forgotPassword">Forgot Password?</a>
+          <a href="#" id="forgotPassword" class="forgot-password">Forgot Password?</a>
         </div>
 
         <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
 
-        <button type="submit" id="submitBtn" class="primary-btn">Sign In</button>
+        <button type="submit" id="submitBtn" class="primary-btn btn btn-primary btn-block login-submit">Sign In</button>
       </form>
 
-      <p class="support">
+      <p class="support login-support">
         Need help?
         <a href="mailto:support@intelligence.local">Contact support</a>.
       </p>

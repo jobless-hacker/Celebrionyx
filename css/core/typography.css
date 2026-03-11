@@ -1,0 +1,5 @@
+body {
+  color: var(--text-main);
+  font-family: "Barlow", "Segoe UI", sans-serif;
+  line-height: 1.4;
+}

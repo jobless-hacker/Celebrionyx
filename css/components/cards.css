@@ -1,0 +1,7 @@
+.empty-state {
+  border: 1px dashed rgba(147, 200, 255, 0.35);
+  border-radius: 10px;
+  color: #bdd4f0;
+  text-align: center;
+  padding: 0.9rem 0.5rem;
+}

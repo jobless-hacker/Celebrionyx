@@ -1,0 +1,66 @@
+.mobile-nav-btn {
+  border: 1px solid rgba(147, 204, 255, 0.26);
+  background: rgba(10, 35, 82, 0.46);
+  color: #dff0ff;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: none;
+}
+
+.mobile-nav-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.org-switcher {
+  border: 1px solid rgba(148, 204, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(12, 38, 90, 0.46);
+  color: #dbeeff;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0.2rem 0.62rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.org-switcher svg {
+  width: 16px;
+  height: 16px;
+}
+
+.circle-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(146, 201, 255, 0.3);
+  background: rgba(18, 54, 116, 0.5);
+  color: #dff0ff;
+  display: grid;
+  place-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.circle-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.notify-count {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #ff5e73;
+  color: #fff;
+  font-size: 0.72rem;
+  display: grid;
+  place-items: center;
+  padding: 0 0.2rem;
+}
